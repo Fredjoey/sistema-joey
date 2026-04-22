@@ -1,0 +1,2565 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Ficha Técnica - Hamburgueria & Pizzaria</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            color: #333;
+            background-color: #f5f5f5;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            border-bottom: 2px solid #ddd;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            background: white;
+            padding: 0 1rem;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .tab-button {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .tab-button:hover {
+            color: #ff6b35;
+        }
+
+        .tab-button.active {
+            color: #ff6b35;
+            border-bottom-color: #ff6b35;
+        }
+
+        .tab-content {
+            display: none;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #555;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input, select {
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #ff6b35;
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+        }
+
+        button {
+            padding: 11px 18px;
+            background: #ff6b35;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: inline-block;
+        }
+
+        button:hover {
+            background: #e5541f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button.secondary {
+            background: #f0f0f0;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+
+        button.secondary:hover {
+            background: #e8e8e8;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        button.danger {
+            background: #e74c3c;
+            padding: 6px 12px;
+            font-size: 13px;
+        }
+
+        button.danger:hover {
+            background: #c0392b;
+        }
+
+        button.success {
+            background: #27ae60;
+            padding: 8px 14px;
+            font-size: 13px;
+        }
+
+        button.success:hover {
+            background: #229954;
+        }
+
+        /* MODAL STYLES */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 1rem;
+        }
+
+        .modal-header h2 {
+            font-size: 20px;
+            color: #333;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            color: #333;
+        }
+
+        .ingredient-search {
+            margin-bottom: 1.5rem;
+        }
+
+        .ingredient-search input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .ingredient-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 100px;
+            gap: 12px;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 1px solid #f0f0f0;
+            background: #fafafa;
+            margin-bottom: 8px;
+            border-radius: 6px;
+        }
+
+        .ingredient-row input {
+            padding: 8px;
+            font-size: 13px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .ingredient-name {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .ingredient-unit {
+            color: #999;
+            font-size: 12px;
+        }
+
+        .ingredient-price {
+            color: #ff6b35;
+            font-weight: 600;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            padding-top: 1.5rem;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .recipe-card, .cost-card {
+            background: #fafafa;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin-bottom: 12px;
+            transition: all 0.2s;
+        }
+
+        .recipe-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border-color: #ff6b35;
+        }
+
+        .recipe-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .recipe-name {
+            font-weight: 600;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .recipe-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            font-size: 13px;
+        }
+
+        .detail-item {
+            padding: 8px;
+            background: white;
+            border-radius: 6px;
+            border-left: 3px solid #ff6b35;
+        }
+
+        .detail-label {
+            color: #999;
+            font-size: 11px;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .detail-value {
+            font-weight: 600;
+            font-size: 15px;
+            color: #333;
+        }
+
+        .detail-value.success {
+            color: #27ae60;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #fff5f1 0%, #fff9f7 100%);
+            border: 1px solid #ffe0d6;
+            border-radius: 8px;
+            padding: 1.25rem;
+            text-align: center;
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ff6b35;
+        }
+
+        .section-title {
+            font-size: 17px;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 12px;
+            color: #333;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-top: 1rem;
+        }
+
+        thead {
+            background: #f9f9f9;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        th {
+            padding: 12px 8px;
+            text-align: left;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 12px 8px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        tbody tr:hover {
+            background: #f9f9f9;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .text-success {
+            color: #27ae60;
+            font-weight: 600;
+        }
+
+        .text-danger {
+            color: #e74c3c;
+        }
+
+        .text-secondary {
+            color: #999;
+            font-size: 12px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: #999;
+        }
+
+        .empty-state p {
+            margin-bottom: 1rem;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .cost-summary {
+            background: linear-gradient(135deg, #fff5f1 0%, #fff9f7 100%);
+            border: 2px solid #ff6b35;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+
+        .cost-summary-label {
+            font-size: 13px;
+            color: #999;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .cost-summary-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #ff6b35;
+        }
+
+        .insumo-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr auto auto;
+            gap: 8px;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 1px solid #f0f0f0;
+            background: #fafafa;
+            margin-bottom: 8px;
+            border-radius: 6px;
+        }
+
+        .insumo-row input {
+            padding: 8px;
+            font-size: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .insumo-name {
+            font-weight: 500;
+            color: #333;
+            padding: 8px 0;
+            font-size: 13px;
+        }
+
+        .insumo-unit {
+            color: #999;
+            font-size: 11px;
+            margin-top: 2px;
+        }
+
+        .insumo-price-display {
+            padding: 8px;
+            background: white;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-weight: 600;
+            color: #ff6b35;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .insumo-price-kg {
+            padding: 8px;
+            background: #e8f4f8;
+            border-radius: 4px;
+            border: 1px solid #b5d9e8;
+            font-weight: 600;
+            color: #2c5aa0;
+            font-size: 11px;
+            text-align: center;
+        }
+
+        .search-insumo {
+            margin-bottom: 1.5rem;
+        }
+
+        .search-insumo input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .add-insumo-form {
+            background: #f0f7ff;
+            border: 1px solid #d0e8ff;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .add-insumo-form .section-title {
+            margin-top: 0;
+            border: none;
+            padding: 0;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .two-col {
+                grid-template-columns: 1fr;
+            }
+
+            .tabs {
+                padding: 0 0.5rem;
+            }
+
+            .tab-button {
+                padding: 10px 12px;
+                font-size: 13px;
+            }
+
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 1.5rem;
+            }
+
+            .ingredient-row, .insumo-row {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .info-box {
+            background: #e8f4f8;
+            border-left: 4px solid #3498db;
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            font-size: 13px;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🍕 Sistema de Ficha Técnica 🍔</h1>
+        <p>Hamburgueria & Pizzaria - Cálculo de Custos e Margens</p>
+    </div>
+
+    <div class="container">
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchTab('recipes', event)">📋 Receitas</button>
+            <button class="tab-button" onclick="switchTab('insumos', event)">📦 Insumos</button>
+            <button class="tab-button" onclick="switchTab('costs', event)">💰 Custos</button>
+            <button class="tab-button" onclick="switchTab('analysis', event)">📊 Análise</button>
+            <button class="tab-button" onclick="switchTab('financeiro', event)">💳 Financeiro</button>
+            <button class="tab-button" onclick="switchTab('notas', event)">🧾 Notas</button>
+            <button class="tab-button" onclick="switchTab('vendas', event)">🛒 Vendas</button>
+        </div>
+
+        <!-- INSUMOS TAB -->
+        <div id="insumos" class="tab-content">
+            <div class="info-box">
+                💡 Consulte e modifique os preços de todos os insumos. As mudanças afetam automaticamente o cálculo das receitas.
+            </div>
+
+            <!-- ADICIONAR NOVO INSUMO -->
+            <div class="add-insumo-form">
+                <div class="section-title">Adicionar Novo Insumo</div>
+                <div class="form-row">
+                    <input type="text" id="newInsumoName" placeholder="Nome do insumo">
+                    <input type="number" id="newInsumoPrice" placeholder="Preço" step="0.001" min="0">
+                    <select id="newInsumoUnit">
+                        <option value="g">Grama (g)</option>
+                        <option value="ml">Mililitro (ml)</option>
+                        <option value="un">Unidade (un)</option>
+                        <option value="kg">Quilograma (kg)</option>
+                        <option value="l">Litro (l)</option>
+                    </select>
+                    <button class="success" onclick="addNewInsumo()">+ Adicionar</button>
+                </div>
+            </div>
+
+            <div class="search-insumo">
+                <input type="text" id="insumoSearch" placeholder="🔍 Buscar insumo..." onkeyup="filterInsumos()">
+            </div>
+
+            <div id="insumosList"></div>
+
+            <div class="button-group">
+                <button onclick="resetAllInsumos()">↺ Restaurar Padrão</button>
+                <button class="secondary" onclick="exportInsumosData()">📥 Exportar</button>
+            </div>
+        </div>
+
+        <!-- RECEITAS TAB -->
+        <div id="recipes" class="tab-content active">
+            <div class="info-box">
+                💡 Crie suas receitas aqui. Clique em "Selecionador de Ingredientes" para adicionar todos os itens necessários.
+            </div>
+
+            <div class="section-title">Criar Nova Receita</div>
+
+            <div class="two-col">
+                <div class="form-group">
+                    <label for="recipeName">Nome da receita</label>
+                    <input type="text" id="recipeName" placeholder="Ex: Pizza Margherita, Burger Classic">
+                </div>
+                <div class="form-group">
+                    <label for="recipePrice">Preço de venda (R$)</label>
+                    <input type="number" id="recipePrice" placeholder="0.00" step="0.01">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="recipeYield">Rendimento (quantidade de unidades)</label>
+                <input type="number" id="recipeYield" placeholder="1" value="1" min="1" step="0.1">
+            </div>
+
+            <button onclick="openIngredientSelector()">🔍 Selecionador de Ingredientes</button>
+
+            <div class="cost-summary" id="recipeCostSummary" style="display: none;">
+                <div class="cost-summary-label">Custo Total da Receita</div>
+                <div class="cost-summary-value" id="recipeCostValue">R$ 0,00</div>
+            </div>
+
+            <div class="button-group">
+                <button onclick="saveRecipe()">✓ Salvar Receita</button>
+                <button class="secondary" onclick="clearRecipeForm()">Limpar Formulário</button>
+            </div>
+
+            <div class="section-title">Receitas Salvas</div>
+            <div class="search-insumo" style="margin-bottom: 1.5rem;">
+                <input type="text" id="recipeSearch" placeholder="🔍 Buscar receita..." onkeyup="filterRecipes()">
+            </div>
+            <div id="recipesList"></div>
+        </div>
+
+        <!-- CUSTOS TAB -->
+        <div id="costs" class="tab-content">
+            <div class="info-box">
+                💡 Registre seus custos fixos (aluguel, salários) e variáveis (embalagem, combustível).
+            </div>
+
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-label">Custo Fixo Mensal</div>
+                    <div class="metric-value" id="fixedCostDisplay">R$ 0,00</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Custo Variável por Unidade</div>
+                    <div class="metric-value" id="variableCostDisplay">R$ 0,00</div>
+                </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <div class="section-title" style="margin: 0;">Custos Fixos Mensais</div>
+                <button onclick="toggleFixedCosts()" id="toggleFixedBtn" style="background: #ff6b35; color: white; border: none; font-size: 18px; cursor: pointer; padding: 8px 12px; border-radius: 4px; font-weight: bold; transition: transform 0.3s; min-width: 40px;">▼</button>
+            </div>
+            <p class="text-secondary">Custos que não variam com a quantidade produzida (aluguel, salários, energia, internet, etc.)</p>
+            
+            <div style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem; border: 1px solid #eee;">
+                <div style="display: grid; grid-template-columns: 2fr 150px auto; gap: 12px; margin-bottom: 1rem;">
+                    <input type="text" id="fixedCostName" placeholder="Ex: Aluguel, Salário, Energia..." style="padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+                    <input type="number" id="fixedCostValue" placeholder="R$ 0,00" step="0.01" min="0" style="padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+                    <button onclick="addFixedCostBtn()" style="background: #27ae60; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; padding: 12px 20px;">+ Adicionar</button>
+                </div>
+            </div>
+            
+            <div id="fixedCostsList"></div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; margin-top: 2rem;">
+                <div class="section-title" style="margin: 0;">Custos Variáveis</div>
+                <button onclick="toggleVariableCosts()" id="toggleVariableBtn" style="background: #3498db; color: white; border: none; font-size: 18px; cursor: pointer; padding: 8px 12px; border-radius: 4px; font-weight: bold; transition: transform 0.3s; min-width: 40px;">▼</button>
+            </div>
+            <p class="text-secondary">Custos que variam conforme a quantidade produzida (embalagem, combustível, mão de obra, etc.)</p>
+            
+            <div style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem; border: 1px solid #eee;">
+                <div style="display: grid; grid-template-columns: 2fr 150px auto; gap: 12px; margin-bottom: 1rem;">
+                    <input type="text" id="variableCostName" placeholder="Ex: Embalagem, Combustível, Gás..." style="padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+                    <input type="number" id="variableCostValue" placeholder="R$ 0,00" step="0.01" min="0" style="padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+                    <button onclick="addVariableCostBtn()" style="background: #3498db; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; padding: 12px 20px;">+ Adicionar</button>
+                </div>
+            </div>
+
+            <div id="variableCostsList"></div>
+        </div>
+
+        <!-- ANÁLISE TAB -->
+        <div id="analysis" class="tab-content">
+            <div class="info-box">
+                💡 Veja o resumo de todas as suas receitas e análises financeiras do negócio.
+            </div>
+
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-label">Número de Receitas</div>
+                    <div class="metric-value" id="recipeCount">0</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Custo Total Mensal</div>
+                    <div class="metric-value" id="totalMonthlyCost">R$ 0,00</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Preço Médio por Unidade</div>
+                    <div class="metric-value" id="avgPrice">R$ 0,00</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Custo Médio por Unidade</div>
+                    <div class="metric-value" id="avgCost">R$ 0,00</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">CMV Médio</div>
+                    <div class="metric-value" id="avgCMV">0%</div>
+                </div>
+            </div>
+
+            <div class="section-title">Resumo das Receitas</div>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Receita</th>
+                            <th class="text-right">Custo</th>
+                            <th class="text-right">Venda</th>
+                            <th class="text-right">Margem (R$)</th>
+                            <th class="text-right">Margem (%)</th>
+                            <th class="text-right">CMV (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="analysisTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- FINANCEIRO TAB -->
+        <div id="financeiro" class="tab-content">
+            <div class="info-box">
+                💳 Configure as taxas do seu negócio e calcule o preço ideal de cada receita com base nos seus custos reais.
+            </div>
+
+            <!-- TAXAS DE PAGAMENTO -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <div class="section-title" style="margin: 0;">Taxas de Pagamento (%)</div>
+            </div>
+            <p class="text-secondary" style="margin-bottom: 1rem;">Informe as taxas cobradas pela sua maquininha em cada modalidade.</p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 2rem;">
+                <div style="background: #f9f9f9; padding: 1.25rem; border-radius: 8px; border: 1px solid #eee;">
+                    <div style="font-size: 12px; color: #999; text-transform: uppercase; margin-bottom: 8px; font-weight: 600;">PIX</div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <input type="number" id="taxaPix" value="0" step="0.01" min="0" max="100" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; font-weight: 600;">
+                        <span style="color: #666; font-weight: 600;">%</span>
+                    </div>
+                </div>
+                <div style="background: #f9f9f9; padding: 1.25rem; border-radius: 8px; border: 1px solid #eee;">
+                    <div style="font-size: 12px; color: #999; text-transform: uppercase; margin-bottom: 8px; font-weight: 600;">Débito</div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <input type="number" id="taxaDebito" value="1.5" step="0.01" min="0" max="100" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; font-weight: 600;">
+                        <span style="color: #666; font-weight: 600;">%</span>
+                    </div>
+                </div>
+                <div style="background: #f9f9f9; padding: 1.25rem; border-radius: 8px; border: 1px solid #eee;">
+                    <div style="font-size: 12px; color: #999; text-transform: uppercase; margin-bottom: 8px; font-weight: 600;">Crédito à Vista</div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <input type="number" id="taxaCredito" value="2.99" step="0.01" min="0" max="100" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; font-weight: 600;">
+                        <span style="color: #666; font-weight: 600;">%</span>
+                    </div>
+                </div>
+                <div style="background: #f9f9f9; padding: 1.25rem; border-radius: 8px; border: 1px solid #eee;">
+                    <div style="font-size: 12px; color: #999; text-transform: uppercase; margin-bottom: 8px; font-weight: 600;">VR/VA</div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <input type="number" id="taxaVR" value="1.2" step="0.01" min="0" max="100" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; font-weight: 600;">
+                        <span style="color: #666; font-weight: 600;">%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- META DE MARGEM -->
+            <div class="section-title">Meta de Margem de Lucro</div>
+            <p class="text-secondary" style="margin-bottom: 1rem;">Defina qual margem de lucro líquido você quer ter sobre cada venda.</p>
+            <div style="background: #f9f9f9; padding: 1.25rem; border-radius: 8px; border: 1px solid #eee; display: flex; align-items: center; gap: 16px; margin-bottom: 2rem;">
+                <input type="number" id="metaMargem" value="30" step="1" min="0" max="100" style="width: 120px; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 20px; font-weight: 700; text-align: center;">
+                <span style="font-size: 20px; font-weight: 700; color: #666;">%</span>
+                <span style="color: #999; font-size: 13px;">de lucro líquido sobre o preço de venda</span>
+            </div>
+
+            <!-- PROJEÇÃO MENSAL -->
+            <div class="section-title">Projeção de Lucro Mensal</div>
+            <p class="text-secondary" style="margin-bottom: 1rem;">Informe quantas unidades você vende por mês de cada receita.</p>
+            <div id="projecaoLista" style="margin-bottom: 1.5rem;"></div>
+
+            <button onclick="calcularFinanceiro()" style="width: 100%; padding: 16px; font-size: 16px; margin-bottom: 2rem;">📊 Calcular Projeção</button>
+
+            <!-- RESULTADOS -->
+            <div id="resultadosFinanceiro" style="display: none;">
+
+                <div class="section-title">💰 Preço Ideal por Receita</div>
+                <p class="text-secondary" style="margin-bottom: 1rem;">Preço sugerido considerando custo do insumo + custos fixos + taxas + margem desejada.</p>
+                <div style="overflow-x: auto; margin-bottom: 2rem;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Receita</th>
+                                <th class="text-right">Custo Insumos</th>
+                                <th class="text-right">Custo Fixo Unit.</th>
+                                <th class="text-right">Preço Atual</th>
+                                <th class="text-right">Preço Ideal (PIX)</th>
+                                <th class="text-right">Preço Ideal (Débito)</th>
+                                <th class="text-right">Preço Ideal (Crédito)</th>
+                                <th class="text-right">Preço Ideal (VR/VA)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="precoIdealTable"></tbody>
+                    </table>
+                </div>
+
+                <div class="section-title">📈 Projeção de Lucro Mensal</div>
+                <div id="projecaoResultado"></div>
+
+                <div class="section-title" style="margin-top: 2rem;">📋 Projeção Detalhada por Receita</div>
+                <p class="text-secondary" style="margin-bottom: 1rem;">Lucro estimado de cada receita individualmente no mês.</p>
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Receita</th>
+                                <th class="text-right">Vendas/mês</th>
+                                <th class="text-right">Receita Bruta</th>
+                                <th class="text-right">Custo Insumos</th>
+                                <th class="text-right">Custo Fixo</th>
+                                <th class="text-right">Taxas (est.)</th>
+                                <th class="text-right">Lucro</th>
+                                <th class="text-right">Margem</th>
+                            </tr>
+                        </thead>
+                        <tbody id="projecaoPorReceita"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOTAS TAB -->
+        <div id="notas" class="tab-content">
+            <div class="info-box">
+                🧾 Lance aqui as notas fiscais das suas compras. Os preços dos insumos serão atualizados automaticamente!
+            </div>
+
+            <div class="section-title">Nova Nota Fiscal</div>
+
+            <div style="background:#f9f9f9; padding:1.5rem; border-radius:8px; border:1px solid #eee; margin-bottom:1.5rem;">
+                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:12px;">
+                    <div class="form-group">
+                        <label>Fornecedor</label>
+                        <input type="text" id="notaFornecedor" placeholder="Ex: Distribuidora João">
+                    </div>
+                    <div class="form-group">
+                        <label>Data da Nota</label>
+                        <input type="date" id="notaData">
+                    </div>
+                    <div class="form-group">
+                        <label>Número da Nota</label>
+                        <input type="text" id="notaNumero" placeholder="Ex: 001234">
+                    </div>
+                </div>
+
+                <div class="section-title" style="margin-top:0;">Itens da Nota</div>
+
+                <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr auto; gap:10px; margin-bottom:8px; font-size:11px; font-weight:600; color:#999; text-transform:uppercase;">
+                    <span>Insumo</span><span>Quantidade</span><span>Unidade</span><span>Valor Total (R$)</span><span></span>
+                </div>
+
+                <div id="notaItens">
+                    <div class="nota-item" style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr auto; gap:10px; margin-bottom:8px; align-items:center;">
+                        <select class="nota-insumo" style="padding:10px; border:1px solid #ddd; border-radius:6px; font-size:13px;"></select>
+                        <input type="number" class="nota-qtd" placeholder="Ex: 10" min="0" step="0.001" style="padding:10px; border:1px solid #ddd; border-radius:6px; font-size:13px;">
+                        <span class="nota-unidade" style="padding:10px; background:#f0f0f0; border-radius:6px; font-size:13px; text-align:center; color:#666;">—</span>
+                        <input type="number" class="nota-valor" placeholder="R$ 0,00" min="0" step="0.01" style="padding:10px; border:1px solid #ddd; border-radius:6px; font-size:13px;">
+                        <button class="danger" onclick="removerLinhaItem(this)" style="padding:8px 12px;">✕</button>
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:12px; margin-top:12px;">
+                    <button class="secondary" onclick="adicionarLinhaItem()">+ Adicionar Item</button>
+                    <button onclick="lancarNota()" style="background:#27ae60;">✓ Lançar Nota e Atualizar Preços</button>
+                </div>
+            </div>
+
+            <div class="section-title">Notas Lançadas</div>
+            <div id="notasLancadas"></div>
+        </div>
+
+        <!-- VENDAS TAB -->
+        <div id="vendas" class="tab-content">
+            <div class="info-box">
+                🛒 Registre as vendas do dia. O sistema acumula tudo e gera o fechamento mensal automaticamente!
+            </div>
+
+            <!-- DASHBOARD DO MÊS -->
+            <div class="metrics-grid" style="margin-bottom:2rem;">
+                <div class="metric-card">
+                    <div class="metric-label">Faturamento do Mês</div>
+                    <div class="metric-value" id="vendasFaturamentoMes">R$ 0,00</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Custo Insumos do Mês</div>
+                    <div class="metric-value" style="color:#e74c3c;" id="vendasCustoMes">R$ 0,00</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Lucro Estimado do Mês</div>
+                    <div class="metric-value" style="color:#27ae60;" id="vendasLucroMes">R$ 0,00</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">Unidades Vendidas</div>
+                    <div class="metric-value" id="vendasUnidadesMes">0</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">CMV do Mês</div>
+                    <div class="metric-value" id="vendasCMVMes">0%</div>
+                </div>
+            </div>
+
+            <!-- REGISTRO DO DIA -->
+            <div class="section-title">Registrar Vendas do Dia</div>
+            <div style="background:#f9f9f9; padding:1.5rem; border-radius:8px; border:1px solid #eee; margin-bottom:1.5rem;">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:1rem;">
+                    <div class="form-group">
+                        <label>Data</label>
+                        <input type="date" id="vendaData">
+                    </div>
+                    <div class="form-group">
+                        <label>Forma de Pagamento Principal</label>
+                        <select id="vendaFormaPagamento" style="padding:10px; border:1px solid #ddd; border-radius:6px; font-size:14px;">
+                            <option value="pix">PIX</option>
+                            <option value="debito">Débito</option>
+                            <option value="credito">Crédito à Vista</option>
+                            <option value="vr">VR/VA</option>
+                            <option value="misto">Misto</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="font-size:11px; font-weight:600; color:#999; text-transform:uppercase; display:grid; grid-template-columns:2fr 1fr 1fr; gap:10px; margin-bottom:8px;">
+                    <span>Receita</span><span style="text-align:center;">Quantidade</span><span style="text-align:right;">Total</span>
+                </div>
+
+                <div id="vendasItens"></div>
+
+                <div style="margin-top:1rem; padding:1rem; background:#fff5f1; border:2px solid #ff6b35; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-weight:600; color:#666;">Total do Dia:</span>
+                    <span style="font-size:24px; font-weight:700; color:#ff6b35;" id="vendaTotalDia">R$ 0,00</span>
+                </div>
+
+                <button onclick="lancarVendas()" style="width:100%; margin-top:1rem; padding:14px; font-size:15px; background:#27ae60;">✓ Registrar Vendas do Dia</button>
+            </div>
+
+            <!-- HISTÓRICO -->
+            <div class="section-title">Histórico de Vendas</div>
+            <div id="vendasHistorico"></div>
+        </div>
+
+    </div>
+    <div id="ingredientModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Selecionador de Ingredientes</h2>
+                <button class="modal-close" onclick="closeIngredientSelector()">✕</button>
+            </div>
+
+            <div class="ingredient-search">
+                <input type="text" id="ingredientSearch" placeholder="🔍 Buscar ingrediente..." onkeyup="filterIngredients()">
+            </div>
+
+            <div id="ingredientsList"></div>
+
+            <div class="section-title">Ingredientes Selecionados</div>
+            <div id="selectedIngredientsSummary"></div>
+
+            <div class="modal-footer">
+                <button class="secondary" onclick="closeIngredientSelector()">Cancelar</button>
+                <button onclick="applySelectedIngredients()">✓ Aplicar Ingredientes</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Base de dados de ingredientes com unidades padrão
+        let ingredientsData = {
+            'Azeite': { price: 0.065, unit: 'ml', costUnit: 'ml' },
+            'Calabresa fatiada': { price: 0.030, unit: 'g', costUnit: 'g' },
+            'Catupiry': { price: 0.033, unit: 'g', costUnit: 'g' },
+            'Cebola roxa': { price: 1.50, unit: 'un', costUnit: 'un' },
+            'Chocolate': { price: 0.058, unit: 'g', costUnit: 'g' },
+            'Creme de leite': { price: 0.020, unit: 'g', costUnit: 'g' },
+            'Farinha Classica': { price: 24.50, unit: 'kg', costUnit: 'g' },
+            'Farinha Napoletana': { price: 24.90, unit: 'kg', costUnit: 'g' },
+            'Fermento seco': { price: 0.048, unit: 'g', costUnit: 'g' },
+            'Frango desfiado': { price: 0.039, unit: 'g', costUnit: 'g' },
+            'Lemady': { price: 0.111, unit: 'g', costUnit: 'g' },
+            'Manjericão': { price: 0.333, unit: 'folha', costUnit: 'folha' },
+            'Massa': { price: 4.58, unit: 'un', costUnit: 'un' },
+            'Mel': { price: 0.050, unit: 'g', costUnit: 'g' },
+            'Molho tomate pelati': { price: 0.030, unit: 'g', costUnit: 'g' },
+            'Mussarela búfala': { price: 0.051, unit: 'g', costUnit: 'g' },
+            'Mussarela comum': { price: 0.056, unit: 'g', costUnit: 'g' },
+            'Nutella': { price: 0.065, unit: 'g', costUnit: 'g' },
+            'Orégano': { price: 0.030, unit: 'g', costUnit: 'g' },
+            'Parmesão': { price: 0.079, unit: 'g', costUnit: 'g' },
+            'Provolone': { price: 0.092, unit: 'g', costUnit: 'g' },
+            'Sal': { price: 0.005, unit: 'g', costUnit: 'g' },
+            'Água': { price: 0.003, unit: 'ml', costUnit: 'ml' }
+        };
+
+        // Salvar original para reset
+        const originalIngredientsData = JSON.parse(JSON.stringify(ingredientsData));
+
+        // Carregar dados salvos
+        let savedIngredientsData = JSON.parse(localStorage.getItem('ingredientsData'));
+        if (savedIngredientsData) {
+            ingredientsData = savedIngredientsData;
+        }
+
+        // Dados
+        let recipes = JSON.parse(localStorage.getItem('recipes')) || [];
+        let fixedCosts = JSON.parse(localStorage.getItem('fixedCosts')) || [];
+        let variableCosts = JSON.parse(localStorage.getItem('variableCosts')) || [];
+        let selectedIngredients = {};
+
+        // Funções
+        function switchTab(tabName, event) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+
+            if (tabName === 'analysis') updateAnalysis();
+            if (tabName === 'insumos') renderInsumosList();
+            if (tabName === 'financeiro') renderProjecaoLista();
+            if (tabName === 'notas') { renderNotasLancadas(); popularSelectInsumos(); }
+            if (tabName === 'vendas') { renderVendasItens(); renderVendasHistorico(); atualizarDashboardVendas(); }
+        }
+
+        // ===== INSUMOS =====
+        function getDisplayUnit(unit) {
+            const units = {
+                'g': 'KG',
+                'ml': 'Litro',
+                'un': 'Unidade',
+                'kg': 'KG',
+                'l': 'Litro'
+            };
+            return units[unit] || unit;
+        }
+
+        function getPriceForLargerUnit(price, unit) {
+            if (unit === 'g') {
+                return (price * 1000).toFixed(2);
+            } else if (unit === 'ml') {
+                return (price * 1000).toFixed(2);
+            } else if (unit === 'un') {
+                return price.toFixed(2);
+            } else if (unit === 'kg') {
+                return price.toFixed(2);
+            } else if (unit === 'l') {
+                return price.toFixed(2);
+            }
+            return price.toFixed(2);
+        }
+
+        function renderInsumosList() {
+            const list = document.getElementById('insumosList');
+            const searchTerm = document.getElementById('insumoSearch').value.toLowerCase();
+
+            const filtered = Object.keys(ingredientsData).filter(ing =>
+                ing.toLowerCase().includes(searchTerm)
+            ).sort((a, b) => a.localeCompare(b, 'pt-BR'));
+
+            list.innerHTML = filtered.map(ing => {
+                const data = ingredientsData[ing];
+                const largerUnitPrice = getPriceForLargerUnit(data.price, data.unit);
+                const displayUnit = getDisplayUnit(data.unit);
+
+                return `
+                    <div class="insumo-row">
+                        <div>
+                            <div class="insumo-name">${ing}</div>
+                            <div class="insumo-unit">Unidade: ${data.unit}</div>
+                        </div>
+                        <input type="number" placeholder="Preço atual" value="${data.price || ''}" 
+                               onchange="updateInsumoPrice('${ing}', parseFloat(this.value) || 0);" 
+                               step="0.001" min="0">
+                        <div class="insumo-price-display">
+                            R$ ${data.price.toFixed(4).replace('.', ',')}
+                        </div>
+                        <div class="insumo-price-kg">
+                            <strong>R$ ${largerUnitPrice.replace('.', ',')}</strong><br>por ${displayUnit}
+                        </div>
+                        <input type="number" placeholder="Novo preço" id="new-${ing}" 
+                               onchange="updateInsumoPrice('${ing}', parseFloat(this.value) || 0);" 
+                               step="0.001" min="0">
+                        <button class="danger" onclick="deleteInsumo('${ing}')">🗑</button>
+                    </div>
+                `;
+            }).join('');
+
+            if (filtered.length === 0) {
+                list.innerHTML = '<div class="empty-state"><p>Nenhum insumo encontrado.</p></div>';
+            }
+        }
+
+        function filterInsumos() {
+            renderInsumosList();
+        }
+
+        function updateInsumoPrice(ingredientName, newPrice) {
+            if (newPrice > 0) {
+                ingredientsData[ingredientName].price = newPrice;
+                localStorage.setItem('ingredientsData', JSON.stringify(ingredientsData));
+                renderInsumosList();
+                renderRecipesList();
+            }
+        }
+
+        function deleteInsumo(ingredientName) {
+            if (confirm(`Tem certeza que deseja remover "${ingredientName}"?`)) {
+                delete ingredientsData[ingredientName];
+                localStorage.setItem('ingredientsData', JSON.stringify(ingredientsData));
+                renderInsumosList();
+                renderRecipesList();
+                alert('✓ Insumo removido com sucesso!');
+            }
+        }
+
+        function addNewInsumo() {
+            const name = document.getElementById('newInsumoName').value.trim();
+            const price = parseFloat(document.getElementById('newInsumoPrice').value);
+            const unit = document.getElementById('newInsumoUnit').value;
+
+            if (!name) {
+                alert('⚠️ Digite o nome do insumo!');
+                return;
+            }
+
+            if (!price || price <= 0) {
+                alert('⚠️ Digite um preço válido!');
+                return;
+            }
+
+            if (ingredientsData[name]) {
+                alert(`⚠️ Insumo "${name}" já existe!`);
+                return;
+            }
+
+            ingredientsData[name] = { price, unit, costUnit: unit };
+            localStorage.setItem('ingredientsData', JSON.stringify(ingredientsData));
+
+            document.getElementById('newInsumoName').value = '';
+            document.getElementById('newInsumoPrice').value = '';
+            document.getElementById('newInsumoUnit').value = 'g';
+
+            renderInsumosList();
+            alert('✓ Insumo adicionado com sucesso!');
+        }
+
+        function resetAllInsumos() {
+            if (confirm('Tem certeza que deseja restaurar todos os preços aos valores originais?')) {
+                ingredientsData = JSON.parse(JSON.stringify(originalIngredientsData));
+                localStorage.setItem('ingredientsData', JSON.stringify(ingredientsData));
+                renderInsumosList();
+                renderRecipesList();
+                alert('✓ Preços restaurados com sucesso!');
+            }
+        }
+
+        function exportInsumosData() {
+            const dataStr = JSON.stringify(ingredientsData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'insumos_precos.json';
+            link.click();
+        }
+
+        // ===== RECEITAS =====
+        function openIngredientSelector() {
+            document.getElementById('ingredientModal').classList.add('show');
+            renderIngredientSelector();
+            updateSelectedIngredientsDisplay();
+        }
+
+        function closeIngredientSelector() {
+            document.getElementById('ingredientModal').classList.remove('show');
+            document.getElementById('ingredientSearch').value = '';
+        }
+
+        function renderIngredientSelector() {
+            const list = document.getElementById('ingredientsList');
+            const searchTerm = document.getElementById('ingredientSearch').value.toLowerCase();
+
+            const filtered = Object.keys(ingredientsData).filter(ing =>
+                ing.toLowerCase().includes(searchTerm)
+            ).sort((a, b) => a.localeCompare(b, 'pt-BR'));
+
+            list.innerHTML = filtered.map(ing => {
+                const data = ingredientsData[ing];
+                const quantity = selectedIngredients[ing] || 0;
+                return `
+                    <div class="ingredient-row">
+                        <div>
+                            <div class="ingredient-name">${ing}</div>
+                            <div class="ingredient-unit">Preço: R$ ${data.price.toFixed(2).replace('.', ',')} por ${data.unit}</div>
+                        </div>
+                        <input type="number" placeholder="Quantidade" value="${quantity}" 
+                               onchange="selectedIngredients['${ing}'] = parseFloat(this.value) || 0; updateRecipeCost(); updateSelectedIngredientsDisplay();" 
+                               step="0.01" min="0">
+                        <div style="text-align: center;">
+                            <div class="ingredient-unit">${data.unit}</div>
+                        </div>
+                        <div class="ingredient-price" style="text-align: right;">
+                            ${quantity > 0 ? `R$ ${calculateIngredientCost(ing, quantity).toFixed(2).replace('.', ',')}` : '-'}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            updateSelectedIngredientsDisplay();
+        }
+
+        function filterIngredients() {
+            renderIngredientSelector();
+        }
+
+        function updateSelectedIngredientsDisplay() {
+            const summary = document.getElementById('selectedIngredientsSummary');
+            const selected = Object.keys(selectedIngredients).filter(ing => selectedIngredients[ing] > 0);
+
+            if (selected.length === 0) {
+                summary.innerHTML = '<div class="empty-state"><p>Nenhum ingrediente selecionado</p></div>';
+                return;
+            }
+
+            let totalCost = 0;
+            summary.innerHTML = selected.map(ing => {
+                const quantity = selectedIngredients[ing];
+                const data = ingredientsData[ing];
+                const cost = calculateIngredientCost(ing, quantity);
+                totalCost += cost;
+
+                return `
+                    <div class="ingredient-row" style="background: #e8f4f8; border-left: 3px solid #3498db;">
+                        <div>
+                            <div class="ingredient-name">${ing}</div>
+                            <div class="ingredient-unit">${quantity} ${data.unit}</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div class="ingredient-price">R$ ${cost.toFixed(2).replace('.', ',')}</div>
+                        </div>
+                        <button class="danger" onclick="selectedIngredients['${ing}'] = 0; updateRecipeCost(); renderIngredientSelector(); updateSelectedIngredientsDisplay();" style="padding: 6px;">✕</button>
+                    </div>
+                `;
+            }).join('');
+
+            // Adicionar linha de total
+            const totalDiv = document.createElement('div');
+            totalDiv.style.cssText = 'background: #fff5f1; border: 2px solid #ff6b35; border-radius: 6px; padding: 12px; margin-top: 12px; text-align: right;';
+            totalDiv.innerHTML = `
+                <div style="font-size: 12px; color: #999; text-transform: uppercase; margin-bottom: 8px;">Total dos Ingredientes</div>
+                <div style="font-size: 24px; font-weight: 700; color: #ff6b35;">R$ ${totalCost.toFixed(2).replace('.', ',')}</div>
+            `;
+            summary.appendChild(totalDiv);
+        }
+
+        function filterIngredients() {
+            renderIngredientSelector();
+        }
+
+        function calculateIngredientCost(ingredientName, quantity) {
+            const ing = ingredientsData[ingredientName];
+            if (!ing || quantity === 0) return 0;
+            
+            if (ing.unit === 'kg' && ing.costUnit === 'g') {
+                return (ing.price / 1000) * quantity;
+            }
+            if (ing.unit === 'kg' && ing.costUnit === 'ml') {
+                return (ing.price / 1000) * quantity;
+            }
+            return ing.price * quantity;
+        }
+
+        function updateRecipeCost() {
+            let totalCost = 0;
+            Object.keys(selectedIngredients).forEach(ing => {
+                totalCost += calculateIngredientCost(ing, selectedIngredients[ing]);
+            });
+
+            const summary = document.getElementById('recipeCostSummary');
+            const costValue = document.getElementById('recipeCostValue');
+
+            if (totalCost > 0) {
+                summary.style.display = 'block';
+                costValue.textContent = `R$ ${totalCost.toFixed(2).replace('.', ',')}`;
+            } else {
+                summary.style.display = 'none';
+            }
+
+            return totalCost;
+        }
+
+        function applySelectedIngredients() {
+            const totalCost = updateRecipeCost();
+            closeIngredientSelector();
+        }
+
+        function clearRecipeForm() {
+            document.getElementById('recipeName').value = '';
+            document.getElementById('recipePrice').value = '';
+            document.getElementById('recipeYield').value = '1';
+            selectedIngredients = {};
+            document.getElementById('recipeCostSummary').style.display = 'none';
+        }
+
+        function saveRecipe() {
+            const name = document.getElementById('recipeName').value.trim();
+            const price = parseFloat(document.getElementById('recipePrice').value);
+            const yield_ = parseFloat(document.getElementById('recipeYield').value) || 1;
+
+            if (!name || !price || price <= 0) {
+                alert('⚠️ Preencha o nome e preço da receita!');
+                return;
+            }
+
+            if (yield_ <= 0) {
+                alert('⚠️ O rendimento deve ser maior que 0!');
+                return;
+            }
+
+            if (Object.keys(selectedIngredients).length === 0) {
+                alert('⚠️ Adicione pelo menos um ingrediente!');
+                return;
+            }
+
+            let cost = 0;
+            const ingredientsList = [];
+            
+            Object.keys(selectedIngredients).forEach(ing => {
+                const quantity = selectedIngredients[ing];
+                if (quantity > 0) {
+                    const ingredientCost = calculateIngredientCost(ing, quantity);
+                    cost += ingredientCost;
+                    ingredientsList.push({
+                        name: ing,
+                        quantity: quantity,
+                        unit: ingredientsData[ing].unit
+                    });
+                }
+            });
+
+            const recipe = {
+                id: Date.now(),
+                name,
+                price,
+                cost: cost / yield_,
+                yield: yield_,
+                ingredients: ingredientsList
+            };
+
+            recipes.push(recipe);
+            localStorage.setItem('recipes', JSON.stringify(recipes));
+
+            alert('✓ Receita salva com sucesso!\n\nCusto: R$ ' + (cost / yield_).toFixed(2).replace('.', ','));
+            clearRecipeForm();
+            renderRecipesList();
+        }
+
+        function renderRecipesList() {
+            const list = document.getElementById('recipesList');
+
+            if (recipes.length === 0) {
+                list.innerHTML = '<div class="empty-state"><p>Nenhuma receita salva ainda.</p></div>';
+                return;
+            }
+
+            const searchTerm = document.getElementById('recipeSearch')?.value.toLowerCase() || '';
+            
+            const filtered = recipes.filter(recipe =>
+                recipe.name.toLowerCase().includes(searchTerm)
+            );
+
+            if (filtered.length === 0) {
+                list.innerHTML = '<div class="empty-state"><p>Nenhuma receita encontrada.</p></div>';
+                return;
+            }
+
+            list.innerHTML = filtered.map(recipe => {
+                const margin = recipe.price - recipe.cost;
+                const marginPct = ((margin / recipe.price) * 100).toFixed(1);
+                const cmv = ((recipe.cost / recipe.price) * 100).toFixed(1);
+                
+                return `
+                    <div class="recipe-card">
+                        <div class="recipe-header">
+                            <span class="recipe-name" onclick="showRecipeDetails(${recipe.id})" style="cursor: pointer; color: #ff6b35; transition: all 0.2s;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${recipe.name}</span>
+                            <button class="danger" onclick="deleteRecipe(${recipe.id})">🗑 Remover</button>
+                        </div>
+                        <div class="recipe-details">
+                            <div class="detail-item">
+                                <div class="detail-label">Custo</div>
+                                <div class="detail-value">R$ ${recipe.cost.toFixed(2).replace('.', ',')}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Preço de Venda</div>
+                                <div class="detail-value">R$ ${recipe.price.toFixed(2).replace('.', ',')}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Margem</div>
+                                <div class="detail-value success">R$ ${margin.toFixed(2).replace('.', ',')}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Margem %</div>
+                                <div class="detail-value success">${marginPct}%</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">CMV</div>
+                                <div class="detail-value">${cmv}%</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Rendimento</div>
+                                <div class="detail-value">${recipe.yield} ${recipe.yield === 1 ? 'unidade' : 'unidades'}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterRecipes() {
+            renderRecipesList();
+        }
+
+        function showRecipeDetails(recipeId) {
+            const recipe = recipes.find(r => r.id === recipeId);
+            if (!recipe) return;
+
+            let isEditMode = false;
+            let editingIngredients = JSON.parse(JSON.stringify(recipe.ingredients));
+
+            function calculateTotalCost() {
+                let totalCost = 0;
+                editingIngredients.forEach(ing => {
+                    totalCost += calculateIngredientCost(ing.name, ing.quantity);
+                });
+                return totalCost;
+            }
+
+            function updateEditingIngredient(idx, newQuantity) {
+                editingIngredients[idx].quantity = parseFloat(newQuantity) || 0;
+                updateRecipeCostDisplay();
+            }
+
+            function deleteEditingIngredient(idx) {
+                editingIngredients.splice(idx, 1);
+                renderModalContent();
+            }
+
+            function addNewIngredient() {
+                const ingredientName = prompt('Digite o nome do insumo:');
+                if (!ingredientName || !ingredientsData[ingredientName]) {
+                    alert('Insumo não encontrado!');
+                    return;
+                }
+
+                const quantity = prompt('Digite a quantidade:');
+                if (!quantity || isNaN(quantity)) {
+                    alert('Quantidade inválida!');
+                    return;
+                }
+
+                editingIngredients.push({
+                    name: ingredientName,
+                    quantity: parseFloat(quantity),
+                    unit: ingredientsData[ingredientName].unit
+                });
+
+                renderModalContent();
+            }
+
+            function updateRecipeCostDisplay() {
+                const newCost = calculateTotalCost();
+                const costDisplay = document.getElementById('recipeCostDisplay');
+                if (costDisplay) {
+                    costDisplay.textContent = `R$ ${newCost.toFixed(2).replace('.', ',')}`;
+                }
+            }
+
+            function saveRecipeChanges() {
+                recipe.ingredients = editingIngredients;
+                recipe.cost = calculateTotalCost();
+                localStorage.setItem('recipes', JSON.stringify(recipes));
+                isEditMode = false;
+                renderModalContent();
+                renderRecipesList();
+            }
+
+            function renderDetails() {
+                return `
+                    <div style="margin-bottom: 1.5rem;">
+                        <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 12px; color: #333;">${recipe.name}</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1.5rem;">
+                            <div style="background: #f0f0f0; padding: 12px; border-radius: 6px;">
+                                <div style="font-size: 11px; color: #999; text-transform: uppercase; margin-bottom: 4px;">Custo Total</div>
+                                <div style="font-size: 18px; font-weight: 600; color: #333;" id="recipeCostDisplay">R$ ${calculateTotalCost().toFixed(2).replace('.', ',')}</div>
+                            </div>
+                            <div style="background: #f0f0f0; padding: 12px; border-radius: 6px;">
+                                <div style="font-size: 11px; color: #999; text-transform: uppercase; margin-bottom: 4px;">Preço de Venda</div>
+                                <div style="font-size: 18px; font-weight: 600; color: #333;">R$ ${recipe.price.toFixed(2).replace('.', ',')}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="border-top: 2px solid #f0f0f0; padding-top: 1.5rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <h4 style="font-size: 14px; font-weight: 600; color: #333;">Ingredientes</h4>
+                            ${isEditMode ? `<button class="success" onclick="addNewIngredientBtn()">+ Adicionar Insumo</button>` : ''}
+                        </div>
+                        
+                        <div id="ingredientsContainer">
+                            ${editingIngredients.map((ing, idx) => {
+                                const data = ingredientsData[ing.name];
+                                if (!data) return '';
+                                
+                                let costDetail = '';
+                                if (data.unit === 'kg') {
+                                    costDetail = `${ing.quantity}g (${(ing.quantity / 1000).toFixed(2)} kg)`;
+                                } else if (data.unit === 'ml') {
+                                    costDetail = `${ing.quantity}ml (${(ing.quantity / 1000).toFixed(2)} l)`;
+                                } else {
+                                    costDetail = `${ing.quantity} ${ing.unit}`;
+                                }
+                                
+                                const ingredientCost = calculateIngredientCost(ing.name, ing.quantity);
+                                
+                                return `
+                                    <div style="display: grid; grid-template-columns: 2fr 1fr 1fr ${isEditMode ? '60px' : ''}; gap: 12px; padding: 12px; background: #fafafa; border-radius: 6px; margin-bottom: 8px; border-left: 3px solid #ff6b35; align-items: ${isEditMode ? 'start' : 'center'};">
+                                        <div>
+                                            <div style="font-weight: 500; color: #333; font-size: 13px;">${ing.name}</div>
+                                            ${isEditMode ? `
+                                                <input type="number" id="input-${idx}" value="${ing.quantity}" step="0.01" min="0" 
+                                                       onchange="updateEditingIngredient(${idx}, this.value)" 
+                                                       style="padding: 6px; border: 1px solid #ddd; border-radius: 4px; width: 100%; font-size: 12px; margin-top: 4px;">
+                                            ` : `<div style="font-size: 12px; color: #999;">${costDetail}</div>`}
+                                        </div>
+                                        <div style="text-align: center; border-right: 1px solid #ddd; padding-right: 12px;">
+                                            <div style="font-size: 11px; color: #999; text-transform: uppercase;">Unitário</div>
+                                            <div style="font-weight: 600; color: #ff6b35;">R$ ${data.price.toFixed(4).replace('.', ',')}</div>
+                                        </div>
+                                        <div style="text-align: right;">
+                                            <div style="font-size: 11px; color: #999; text-transform: uppercase;">Total</div>
+                                            <div style="font-weight: 600; color: #27ae60;">R$ ${ingredientCost.toFixed(2).replace('.', ',')}</div>
+                                        </div>
+                                        ${isEditMode ? `<button class="danger" onclick="deleteEditingIngredient(${idx})">🗑</button>` : ''}
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            function renderModalContent() {
+                const modalBody = document.getElementById('modalBody');
+                const modalFooter = document.getElementById('modalFooter');
+                if (modalBody) {
+                    modalBody.innerHTML = renderDetails();
+                }
+                if (modalFooter) {
+                    if (isEditMode) {
+                        modalFooter.innerHTML = `
+                            <button class="secondary" onclick="isEditModeBtnCancel()">Cancelar Edição</button>
+                            <button class="success" onclick="saveRecipeChanges()">✓ Salvar Mudanças</button>
+                        `;
+                    } else {
+                        modalFooter.innerHTML = `
+                            <button class="secondary" onclick="this.closest('.modal').parentElement.removeChild(this.closest('.modal'))">Fechar</button>
+                            <button style="background: #3498db;" onclick="isEditModeBtn()">✏️ Editar Receita</button>
+                        `;
+                    }
+                }
+            }
+
+            // Criar modal de detalhes
+            const modal = document.createElement('div');
+            modal.className = 'modal show';
+            modal.style.zIndex = '2000';
+            modal.onclick = function(e) {
+                if (e.target === modal) {
+                    document.body.removeChild(modal);
+                }
+            };
+            
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Detalhes da Receita</h2>
+                        <button class="modal-close" onclick="this.closest('.modal').parentElement.removeChild(this.closest('.modal'))">✕</button>
+                    </div>
+                    <div id="modalBody" style="max-height: 70vh; overflow-y: auto;">
+                        ${renderDetails()}
+                    </div>
+                    <div id="modalFooter" class="modal-footer">
+                        <button class="secondary" onclick="this.closest('.modal').parentElement.removeChild(this.closest('.modal'))">Fechar</button>
+                        <button style="background: #3498db;" onclick="isEditModeBtn()">✏️ Editar Receita</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+
+            // Funções globais para o modal
+            window.updateEditingIngredient = updateEditingIngredient;
+            window.deleteEditingIngredient = deleteEditingIngredient;
+            window.addNewIngredientBtn = addNewIngredient;
+            window.saveRecipeChanges = saveRecipeChanges;
+            window.renderModalContent = renderModalContent;
+            window.isEditModeBtn = function() {
+                isEditMode = true;
+                renderModalContent();
+            };
+            window.isEditModeBtnCancel = function() {
+                isEditMode = false;
+                editingIngredients = JSON.parse(JSON.stringify(recipe.ingredients));
+                renderModalContent();
+            };
+        }
+
+        function deleteRecipe(id) {
+            if (confirm('Tem certeza que deseja remover esta receita?')) {
+                recipes = recipes.filter(r => r.id !== id);
+                localStorage.setItem('recipes', JSON.stringify(recipes));
+                renderRecipesList();
+                updateAnalysis();
+            }
+        }
+
+        // ===== CUSTOS =====
+        let fixedCostsExpanded = true;
+        let variableCostsExpanded = true;
+
+        function toggleFixedCosts() {
+            fixedCostsExpanded = !fixedCostsExpanded;
+            const list = document.getElementById('fixedCostsList');
+            const btn = document.getElementById('toggleFixedBtn');
+            
+            if (!list || !btn) return;
+            
+            if (fixedCostsExpanded) {
+                list.style.display = 'block';
+                btn.style.transform = 'rotate(0deg)';
+            } else {
+                list.style.display = 'none';
+                btn.style.transform = 'rotate(-90deg)';
+            }
+        }
+
+        function toggleVariableCosts() {
+            variableCostsExpanded = !variableCostsExpanded;
+            const list = document.getElementById('variableCostsList');
+            const btn = document.getElementById('toggleVariableBtn');
+            
+            if (!list || !btn) return;
+            
+            if (variableCostsExpanded) {
+                list.style.display = 'block';
+                btn.style.transform = 'rotate(0deg)';
+            } else {
+                list.style.display = 'none';
+                btn.style.transform = 'rotate(-90deg)';
+            }
+        }
+
+        function addFixedCostBtn() {
+            const nameInput = document.getElementById('fixedCostName');
+            const valueInput = document.getElementById('fixedCostValue');
+            
+            const name = nameInput.value.trim();
+            const value = parseFloat(valueInput.value) || 0;
+
+            if (!name) {
+                alert('Digite a descrição do custo fixo!');
+                return;
+            }
+
+            if (value <= 0) {
+                alert('Digite um valor válido!');
+                return;
+            }
+
+            fixedCosts.push({ id: Date.now(), name: name, value: value });
+            
+            nameInput.value = '';
+            valueInput.value = '';
+            nameInput.focus();
+            
+            renderFixedCosts();
+        }
+
+        function renderFixedCosts() {
+            const list = document.getElementById('fixedCostsList');
+            
+            if (!list) {
+                console.error('Elemento fixedCostsList não encontrado');
+                return;
+            }
+
+            if (fixedCosts.length === 0) {
+                list.innerHTML = '<div class="empty-state"><p>Nenhum custo fixo adicionado.</p></div>';
+            } else {
+                list.innerHTML = fixedCosts.map((cost, idx) => `
+                    <div class="cost-card">
+                        <div style="display: grid; grid-template-columns: 2fr 1fr auto; gap: 12px; align-items: center;">
+                            <div>
+                                <div style="font-weight: 500; color: #333; font-size: 14px;">${cost.name}</div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-weight: 600; color: #ff6b35; font-size: 16px;">R$ ${cost.value.toFixed(2).replace('.', ',')}</div>
+                            </div>
+                            <button class="danger" onclick="fixedCosts.splice(${idx}, 1); renderFixedCosts(); updateCostsDisplay();">🗑</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            localStorage.setItem('fixedCosts', JSON.stringify(fixedCosts));
+            updateCostsDisplay();
+        }
+
+        function addVariableCostBtn() {
+            const nameInput = document.getElementById('variableCostName');
+            const valueInput = document.getElementById('variableCostValue');
+            
+            const name = nameInput.value.trim();
+            const value = parseFloat(valueInput.value) || 0;
+
+            if (!name) {
+                alert('Digite a descrição do custo variável!');
+                return;
+            }
+
+            if (value <= 0) {
+                alert('Digite um valor válido!');
+                return;
+            }
+
+            variableCosts.push({ id: Date.now(), name: name, value: value });
+            
+            nameInput.value = '';
+            valueInput.value = '';
+            nameInput.focus();
+            
+            renderVariableCosts();
+        }
+
+        function renderVariableCosts() {
+            const list = document.getElementById('variableCostsList');
+            
+            if (!list) {
+                console.error('Elemento variableCostsList não encontrado');
+                return;
+            }
+
+            if (variableCosts.length === 0) {
+                list.innerHTML = '<div class="empty-state"><p>Nenhum custo variável adicionado.</p></div>';
+            } else {
+                list.innerHTML = variableCosts.map((cost, idx) => `
+                    <div class="cost-card">
+                        <div style="display: grid; grid-template-columns: 2fr 1fr auto; gap: 12px; align-items: center;">
+                            <div>
+                                <div style="font-weight: 500; color: #333; font-size: 14px;">${cost.name}</div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-weight: 600; color: #3498db; font-size: 16px;">R$ ${cost.value.toFixed(2).replace('.', ',')}</div>
+                            </div>
+                            <button class="danger" onclick="variableCosts.splice(${idx}, 1); renderVariableCosts(); updateCostsDisplay();">🗑</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            localStorage.setItem('variableCosts', JSON.stringify(variableCosts));
+            updateCostsDisplay();
+        }
+
+        function updateCostsDisplay() {
+            const totalFixed = fixedCosts.reduce((sum, c) => sum + (c.value || 0), 0);
+            const totalVariable = variableCosts.reduce((sum, c) => sum + (c.value || 0), 0);
+
+            document.getElementById('fixedCostDisplay').textContent = `R$ ${totalFixed.toFixed(2).replace('.', ',')}`;
+            document.getElementById('variableCostDisplay').textContent = `R$ ${totalVariable.toFixed(2).replace('.', ',')}`;
+        }
+
+        // ===== ANÁLISE =====
+        function getCMVColor(cmv) {
+            const cmvNum = parseFloat(cmv);
+            if (cmvNum >= 28 && cmvNum <= 32) {
+                return { color: '#27ae60', background: '#e8f8f5' }; // Verde
+            } else if (cmvNum >= 33 && cmvNum <= 38) {
+                return { color: '#f39c12', background: '#fef5e7' }; // Amarelo
+            } else if (cmvNum > 38) {
+                return { color: '#e74c3c', background: '#fadbd8' }; // Vermelho
+            } else {
+                return { color: '#3498db', background: '#ebf5fb' }; // Azul (abaixo de 28)
+            }
+        }
+
+        function updateAnalysis() {
+            const totalFixed = fixedCosts.reduce((sum, c) => sum + (c.value || 0), 0);
+            const totalVariable = variableCosts.reduce((sum, c) => sum + (c.value || 0), 0);
+            const totalMonthlyCost = totalFixed + totalVariable;
+
+            document.getElementById('recipeCount').textContent = recipes.length;
+            document.getElementById('totalMonthlyCost').textContent = `R$ ${totalMonthlyCost.toFixed(2).replace('.', ',')}`;
+
+            if (recipes.length > 0) {
+                const avgPrice = recipes.reduce((sum, r) => sum + r.price, 0) / recipes.length;
+                const avgCost = recipes.reduce((sum, r) => sum + r.cost, 0) / recipes.length;
+                const avgCMV = (recipes.reduce((sum, r) => sum + ((r.cost / r.price) * 100), 0) / recipes.length).toFixed(1);
+                
+                document.getElementById('avgPrice').textContent = `R$ ${avgPrice.toFixed(2).replace('.', ',')}`;
+                document.getElementById('avgCost').textContent = `R$ ${avgCost.toFixed(2).replace('.', ',')}`;
+                
+                // Aplicar cor ao CMV médio
+                const avgCMVDisplay = document.getElementById('avgCMV');
+                const cmvColors = getCMVColor(avgCMV);
+                avgCMVDisplay.textContent = `${avgCMV}%`;
+                avgCMVDisplay.style.color = cmvColors.color;
+                avgCMVDisplay.parentElement.style.background = cmvColors.background;
+            }
+
+            const tbody = document.getElementById('analysisTable');
+            if (recipes.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem; color: #999;">Nenhuma receita salva. Crie receitas na aba "Receitas".</td></tr>';
+            } else {
+                tbody.innerHTML = recipes.map(recipe => {
+                    const margin = recipe.price - recipe.cost;
+                    const marginPct = ((margin / recipe.price) * 100).toFixed(1);
+                    const cmv = ((recipe.cost / recipe.price) * 100).toFixed(1);
+                    const cmvColors = getCMVColor(cmv);
+                    
+                    return `
+                        <tr>
+                            <td><strong>${recipe.name}</strong></td>
+                            <td class="text-right">R$ ${recipe.cost.toFixed(2).replace('.', ',')}</td>
+                            <td class="text-right">R$ ${recipe.price.toFixed(2).replace('.', ',')}</td>
+                            <td class="text-right text-success">R$ ${margin.toFixed(2).replace('.', ',')}</td>
+                            <td class="text-right text-success"><strong>${marginPct}%</strong></td>
+                            <td class="text-right"><strong style="color: ${cmvColors.color};">${cmv}%</strong></td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+        }
+
+        // Fechar modal ao clicar fora
+        window.onclick = function(event) {
+            const modal = document.getElementById('ingredientModal');
+            if (event.target == modal) {
+                closeIngredientSelector();
+            }
+        }
+
+        // ===== NOTAS =====
+        let notasLancadas = JSON.parse(localStorage.getItem('notasLancadas')) || [];
+
+        // ===== VENDAS =====
+        let vendasRegistradas = JSON.parse(localStorage.getItem('vendasRegistradas')) || [];
+
+        // Inicializar
+        renderRecipesList();
+        renderFixedCosts();
+        renderVariableCosts();
+        renderNotasLancadas();
+        renderVendasHistorico();
+
+        // Setar data de hoje nos campos
+        const hoje = new Date().toISOString().split('T')[0];
+        document.getElementById('notaData').value = hoje;
+        document.getElementById('vendaData').value = hoje;
+
+        // Inicializar primeira linha da nota
+        popularSelectInsumos();
+
+        function popularSelectInsumos() {
+            const selects = document.querySelectorAll('.nota-insumo');
+            const options = Object.keys(ingredientsData).sort((a,b) => a.localeCompare(b,'pt-BR')).map(ing =>
+                `<option value="${ing}">${ing} (${ingredientsData[ing].unit})</option>`
+            ).join('');
+            selects.forEach(sel => {
+                const current = sel.value;
+                sel.innerHTML = `<option value="">— Selecionar insumo —</option>` + options;
+                if (current) sel.value = current;
+                sel.onchange = function() {
+                    const row = this.closest('.nota-item');
+                    const unidade = row.querySelector('.nota-unidade');
+                    unidade.textContent = ingredientsData[this.value]?.unit || '—';
+                };
+            });
+        }
+
+        function adicionarLinhaItem() {
+            const container = document.getElementById('notaItens');
+            const div = document.createElement('div');
+            div.className = 'nota-item';
+            div.style.cssText = 'display:grid; grid-template-columns:2fr 1fr 1fr 1fr auto; gap:10px; margin-bottom:8px; align-items:center;';
+            div.innerHTML = `
+                <select class="nota-insumo" style="padding:10px; border:1px solid #ddd; border-radius:6px; font-size:13px;"></select>
+                <input type="number" class="nota-qtd" placeholder="Ex: 10" min="0" step="0.001" style="padding:10px; border:1px solid #ddd; border-radius:6px; font-size:13px;">
+                <span class="nota-unidade" style="padding:10px; background:#f0f0f0; border-radius:6px; font-size:13px; text-align:center; color:#666;">—</span>
+                <input type="number" class="nota-valor" placeholder="R$ 0,00" min="0" step="0.01" style="padding:10px; border:1px solid #ddd; border-radius:6px; font-size:13px;">
+                <button class="danger" onclick="removerLinhaItem(this)" style="padding:8px 12px;">✕</button>
+            `;
+            container.appendChild(div);
+            popularSelectInsumos();
+        }
+
+        function removerLinhaItem(btn) {
+            const itens = document.querySelectorAll('.nota-item');
+            if (itens.length > 1) btn.closest('.nota-item').remove();
+        }
+
+        function lancarNota() {
+            const fornecedor = document.getElementById('notaFornecedor').value.trim();
+            const data       = document.getElementById('notaData').value;
+            const numero     = document.getElementById('notaNumero').value.trim();
+
+            if (!fornecedor || !data) {
+                alert('⚠️ Preencha o fornecedor e a data da nota!');
+                return;
+            }
+
+            const itens = [];
+            let totalNota = 0;
+
+            document.querySelectorAll('.nota-item').forEach(row => {
+                const insumo = row.querySelector('.nota-insumo').value;
+                const qtd    = parseFloat(row.querySelector('.nota-qtd').value) || 0;
+                const valor  = parseFloat(row.querySelector('.nota-valor').value) || 0;
+
+                if (!insumo || qtd === 0 || valor === 0) return;
+
+                const unit = ingredientsData[insumo]?.unit;
+                let novoPreco;
+                if (unit === 'kg') {
+                    novoPreco = valor / (qtd * 1000);
+                } else if (unit === 'l') {
+                    novoPreco = valor / (qtd * 1000);
+                } else {
+                    novoPreco = valor / qtd;
+                }
+
+                const precoAntigo = ingredientsData[insumo].price;
+                const variacao = ((novoPreco - precoAntigo) / precoAntigo * 100).toFixed(1);
+                totalNota += valor;
+
+                itens.push({ insumo, qtd, unit, valor, precoAntigo, precoNovo: novoPreco, variacao });
+            });
+
+            if (itens.length === 0) {
+                alert('⚠️ Adicione pelo menos um item válido na nota!');
+                return;
+            }
+
+            // Abrir modal de revisão
+            const modal = document.createElement('div');
+            modal.className = 'modal show';
+            modal.style.zIndex = '2000';
+
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width:900px;">
+                    <div class="modal-header">
+                        <h2>🧾 Revisar Nota Antes de Confirmar</h2>
+                        <button class="modal-close" onclick="this.closest('.modal').remove()">✕</button>
+                    </div>
+
+                    <div style="background:#f9f9f9; padding:1rem; border-radius:8px; margin-bottom:1.5rem; display:flex; gap:2rem;">
+                        <div><span style="color:#999; font-size:12px;">FORNECEDOR</span><br><strong>${fornecedor}</strong></div>
+                        <div><span style="color:#999; font-size:12px;">DATA</span><br><strong>${new Date(data+'T12:00:00').toLocaleDateString('pt-BR')}</strong></div>
+                        ${numero ? `<div><span style="color:#999; font-size:12px;">Nº NOTA</span><br><strong>${numero}</strong></div>` : ''}
+                        <div><span style="color:#999; font-size:12px;">TOTAL DA NOTA</span><br><strong style="color:#ff6b35; font-size:18px;">R$ ${totalNota.toFixed(2).replace('.', ',')}</strong></div>
+                    </div>
+
+                    <div class="section-title" style="margin-top:0;">📦 Itens e Impacto nos Preços</div>
+                    <p style="color:#999; font-size:13px; margin-bottom:1rem;">Verifique como cada item vai atualizar o preço dos insumos. Você pode editar antes de confirmar.</p>
+
+                    <table style="width:100%; margin-bottom:1.5rem;">
+                        <thead>
+                            <tr>
+                                <th>Insumo</th>
+                                <th class="text-right">Qtd Comprada</th>
+                                <th class="text-right">Valor Pago</th>
+                                <th class="text-right">Preço Atual</th>
+                                <th class="text-right">Novo Preço</th>
+                                <th class="text-right">Variação</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${itens.map((item, idx) => {
+                                const cor = parseFloat(item.variacao) > 0 ? '#e74c3c' : parseFloat(item.variacao) < 0 ? '#27ae60' : '#999';
+                                const seta = parseFloat(item.variacao) > 0 ? '↑' : parseFloat(item.variacao) < 0 ? '↓' : '→';
+                                return `
+                                    <tr>
+                                        <td><strong>${item.insumo}</strong><br><span style="font-size:11px; color:#999;">${item.qtd} ${item.unit} comprados</span></td>
+                                        <td class="text-right">R$ ${item.valor.toFixed(2).replace('.', ',')}</td>
+                                        <td class="text-right" style="color:#999;">R$ ${item.precoAntigo.toFixed(4).replace('.', ',')} / ${item.unit}</td>
+                                        <td class="text-right">
+                                            <input type="number" id="revisao_preco_${idx}" value="${item.precoNovo.toFixed(4)}" step="0.0001" min="0"
+                                                   style="width:100px; padding:6px; border:1px solid #ddd; border-radius:4px; font-size:13px; text-align:right;"
+                                                   onchange="atualizarVariacaoRevisao(${idx}, ${item.precoAntigo})">
+                                            <span style="font-size:11px; color:#999;"> / ${item.unit}</span>
+                                        </td>
+                                        <td class="text-right" id="variacao_${idx}">
+                                            <strong style="color:${cor};">${seta} ${Math.abs(item.variacao)}%</strong>
+                                        </td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                        </tbody>
+                    </table>
+
+                    <div class="info-box">
+                        💡 Você pode <strong>editar o novo preço</strong> de qualquer insumo antes de confirmar. Isso é útil se quiser arredondar ou corrigir valores.
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="secondary" onclick="this.closest('.modal').remove()">✕ Cancelar</button>
+                        <button style="background:#27ae60;" onclick="confirmarNota('${fornecedor}', '${data}', '${numero}', ${totalNota}, ${JSON.stringify(itens).replace(/'/g, "&#39;")})">
+                            ✓ Confirmar e Atualizar Preços
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(modal);
+        }
+
+        function atualizarVariacaoRevisao(idx, precoAntigo) {
+            const novoPreco = parseFloat(document.getElementById(`revisao_preco_${idx}`).value) || 0;
+            const variacao = ((novoPreco - precoAntigo) / precoAntigo * 100).toFixed(1);
+            const cor = variacao > 0 ? '#e74c3c' : variacao < 0 ? '#27ae60' : '#999';
+            const seta = variacao > 0 ? '↑' : variacao < 0 ? '↓' : '→';
+            const el = document.getElementById(`variacao_${idx}`);
+            if (el) el.innerHTML = `<strong style="color:${cor};">${seta} ${Math.abs(variacao)}%</strong>`;
+        }
+
+        function confirmarNota(fornecedor, data, numero, totalNota, itens) {
+            // Aplicar novos preços (usando os valores editados no modal)
+            itens.forEach((item, idx) => {
+                const precoEditado = parseFloat(document.getElementById(`revisao_preco_${idx}`)?.value) || item.precoNovo;
+                ingredientsData[item.insumo].price = precoEditado;
+                item.precoNovo = precoEditado;
+            });
+
+            // Salvar nota
+            const nota = { id: Date.now(), fornecedor, data, numero, itens, total: totalNota };
+            notasLancadas.unshift(nota);
+            localStorage.setItem('notasLancadas', JSON.stringify(notasLancadas));
+            localStorage.setItem('ingredientsData', JSON.stringify(ingredientsData));
+
+            // Fechar modal
+            document.querySelector('.modal[style*="2000"]')?.remove();
+
+            renderNotasLancadas();
+            renderRecipesList();
+
+            // Limpar form
+            document.getElementById('notaFornecedor').value = '';
+            document.getElementById('notaData').value = hoje;
+            document.getElementById('notaNumero').value = '';
+            document.getElementById('notaItens').innerHTML = '';
+            adicionarLinhaItem();
+
+            alert(`✅ Nota confirmada!\n\nTotal: R$ ${totalNota.toFixed(2).replace('.', ',')}\nInsumos atualizados: ${itens.length}\nReceitas recalculadas automaticamente!`);
+        }
+
+        function renderNotasLancadas() {
+            const container = document.getElementById('notasLancadas');
+            if (!container) return;
+
+            if (notasLancadas.length === 0) {
+                container.innerHTML = '<div class="empty-state"><p>Nenhuma nota lançada ainda.</p></div>';
+                return;
+            }
+
+            container.innerHTML = notasLancadas.map(nota => `
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <div>
+                            <span style="font-weight:700; font-size:15px;">${nota.fornecedor}</span>
+                            <span style="color:#999; font-size:12px; margin-left:12px;">${new Date(nota.data+'T12:00:00').toLocaleDateString('pt-BR')} ${nota.numero ? '· Nº '+nota.numero : ''}</span>
+                        </div>
+                        <span style="font-weight:700; font-size:18px; color:#ff6b35;">R$ ${nota.total.toFixed(2).replace('.', ',')}</span>
+                    </div>
+                    <div style="margin-top:8px;">
+                        ${nota.itens.map(item => `
+                            <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #f0f0f0; font-size:13px;">
+                                <span><strong>${item.insumo}</strong> — ${item.qtd} ${item.unit}</span>
+                                <span style="color:#999;">
+                                    R$ ${item.precoAntigo.toFixed(4).replace('.', ',')} → 
+                                    <strong style="color:${item.precoNovo > item.precoAntigo ? '#e74c3c' : '#27ae60'};">
+                                        R$ ${item.precoNovo.toFixed(4).replace('.', ',')}
+                                    </strong> por ${item.unit}
+                                </span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderVendasItens() {
+            const container = document.getElementById('vendasItens');
+            if (!container) return;
+
+            if (recipes.length === 0) {
+                container.innerHTML = '<div class="empty-state"><p>Nenhuma receita cadastrada.</p></div>';
+                return;
+            }
+
+            container.innerHTML = recipes.map(recipe => `
+                <div style="display:grid; grid-template-columns:2fr 1fr 1fr; gap:10px; margin-bottom:8px; align-items:center;">
+                    <div>
+                        <div style="font-weight:500; color:#333; font-size:14px;">${recipe.name}</div>
+                        <div style="font-size:11px; color:#999;">R$ ${recipe.price.toFixed(2).replace('.', ',')} un</div>
+                    </div>
+                    <input type="number" id="venda_${recipe.id}" placeholder="0" min="0" value="0"
+                           onchange="atualizarTotalDia()"
+                           style="padding:10px; border:1px solid #ddd; border-radius:6px; font-size:16px; font-weight:700; text-align:center;">
+                    <div style="text-align:right; font-weight:600; color:#ff6b35;" id="subtotal_${recipe.id}">R$ 0,00</div>
+                </div>
+            `).join('');
+        }
+
+        function atualizarTotalDia() {
+            let total = 0;
+            recipes.forEach(recipe => {
+                const qtd = parseFloat(document.getElementById(`venda_${recipe.id}`)?.value) || 0;
+                const subtotal = qtd * recipe.price;
+                total += subtotal;
+                const el = document.getElementById(`subtotal_${recipe.id}`);
+                if (el) el.textContent = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
+            });
+            const el = document.getElementById('vendaTotalDia');
+            if (el) el.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+        }
+
+        function lancarVendas() {
+            const data = document.getElementById('vendaData').value;
+            const formaPagamento = document.getElementById('vendaFormaPagamento').value;
+
+            if (!data) {
+                alert('⚠️ Selecione a data das vendas!');
+                return;
+            }
+
+            const itens = [];
+            let totalDia = 0;
+            let custoDia = 0;
+            let unidadesDia = 0;
+
+            recipes.forEach(recipe => {
+                const qtd = parseFloat(document.getElementById(`venda_${recipe.id}`)?.value) || 0;
+                if (qtd > 0) {
+                    const subtotal = qtd * recipe.price;
+                    const custo = qtd * recipe.cost;
+                    totalDia += subtotal;
+                    custoDia += custo;
+                    unidadesDia += qtd;
+                    itens.push({ recipeId: recipe.id, name: recipe.name, qtd, price: recipe.price, subtotal, custo });
+                }
+            });
+
+            if (itens.length === 0) {
+                alert('⚠️ Informe ao menos uma venda!');
+                return;
+            }
+
+            const venda = { id: Date.now(), data, formaPagamento, itens, total: totalDia, custo: custoDia, unidades: unidadesDia };
+            vendasRegistradas.unshift(venda);
+            localStorage.setItem('vendasRegistradas', JSON.stringify(vendasRegistradas));
+
+            renderVendasHistorico();
+            atualizarDashboardVendas();
+
+            // Zerar campos
+            recipes.forEach(recipe => {
+                const el = document.getElementById(`venda_${recipe.id}`);
+                if (el) el.value = 0;
+                const sub = document.getElementById(`subtotal_${recipe.id}`);
+                if (sub) sub.textContent = 'R$ 0,00';
+            });
+            document.getElementById('vendaTotalDia').textContent = 'R$ 0,00';
+
+            alert(`✅ Vendas registradas!\n\nFaturamento: R$ ${totalDia.toFixed(2).replace('.', ',')}\nUnidades: ${unidadesDia}`);
+        }
+
+        function atualizarDashboardVendas() {
+            const mes = new Date().getMonth();
+            const ano = new Date().getFullYear();
+
+            const vendasMes = vendasRegistradas.filter(v => {
+                const d = new Date(v.data + 'T12:00:00');
+                return d.getMonth() === mes && d.getFullYear() === ano;
+            });
+
+            const faturamento = vendasMes.reduce((s, v) => s + v.total, 0);
+            const custo       = vendasMes.reduce((s, v) => s + v.custo, 0);
+            const unidades    = vendasMes.reduce((s, v) => s + v.unidades, 0);
+            const lucro       = faturamento - custo - fixedCosts.reduce((s, c) => s + (c.value || 0), 0);
+            const cmv         = faturamento > 0 ? ((custo / faturamento) * 100).toFixed(1) : 0;
+            const cmvColors   = getCMVColor(cmv);
+
+            const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+            set('vendasFaturamentoMes', `R$ ${faturamento.toFixed(2).replace('.', ',')}`);
+            set('vendasCustoMes',       `R$ ${custo.toFixed(2).replace('.', ',')}`);
+            set('vendasLucroMes',       `R$ ${lucro.toFixed(2).replace('.', ',')}`);
+            set('vendasUnidadesMes',    unidades);
+            const cmvEl = document.getElementById('vendasCMVMes');
+            if (cmvEl) { cmvEl.textContent = `${cmv}%`; cmvEl.style.color = cmvColors.color; }
+        }
+
+        function renderVendasHistorico() {
+            const container = document.getElementById('vendasHistorico');
+            if (!container) return;
+
+            if (vendasRegistradas.length === 0) {
+                container.innerHTML = '<div class="empty-state"><p>Nenhuma venda registrada ainda.</p></div>';
+                return;
+            }
+
+            const formas = { pix: 'PIX', debito: 'Débito', credito: 'Crédito', vr: 'VR/VA', misto: 'Misto' };
+
+            container.innerHTML = vendasRegistradas.map(venda => `
+                <div class="recipe-card">
+                    <div class="recipe-header">
+                        <div>
+                            <span style="font-weight:700; font-size:15px;">${new Date(venda.data+'T12:00:00').toLocaleDateString('pt-BR', {weekday:'long', day:'2-digit', month:'long'})}</span>
+                            <span style="margin-left:10px; background:#e8f4f8; color:#2c5aa0; padding:3px 8px; border-radius:12px; font-size:11px; font-weight:600;">${formas[venda.formaPagamento] || venda.formaPagamento}</span>
+                        </div>
+                        <div style="text-align:right;">
+                            <div style="font-weight:700; font-size:18px; color:#ff6b35;">R$ ${venda.total.toFixed(2).replace('.', ',')}</div>
+                            <div style="font-size:11px; color:#999;">${venda.unidades} unidades</div>
+                        </div>
+                    </div>
+                    <div style="margin-top:8px; display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:8px;">
+                        ${venda.itens.map(item => `
+                            <div style="background:#f9f9f9; padding:8px 12px; border-radius:6px; border-left:3px solid #ff6b35;">
+                                <div style="font-weight:600; font-size:13px;">${item.name}</div>
+                                <div style="font-size:12px; color:#999;">${item.qtd} un · R$ ${item.subtotal.toFixed(2).replace('.', ',')}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div style="margin-top:8px; text-align:right;">
+                        <button class="danger" onclick="excluirVenda(${venda.id})" style="font-size:11px; padding:4px 8px;">🗑 Excluir</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function excluirVenda(id) {
+            if (!confirm('Excluir este registro de venda?')) return;
+            vendasRegistradas = vendasRegistradas.filter(v => v.id !== id);
+            localStorage.setItem('vendasRegistradas', JSON.stringify(vendasRegistradas));
+            renderVendasHistorico();
+            atualizarDashboardVendas();
+        }
+
+        // ===== FINANCEIRO =====
+        function renderProjecaoLista() {
+            const lista = document.getElementById('projecaoLista');
+            if (!lista) return;
+
+            if (recipes.length === 0) {
+                lista.innerHTML = '<div class="empty-state"><p>Nenhuma receita cadastrada ainda. Crie receitas na aba Receitas.</p></div>';
+                return;
+            }
+
+            lista.innerHTML = recipes.map(recipe => `
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 12px; align-items: center; padding: 12px; background: #fafafa; border-radius: 6px; margin-bottom: 8px; border-left: 3px solid #ff6b35;">
+                    <div>
+                        <div style="font-weight: 600; color: #333;">${recipe.name}</div>
+                        <div style="font-size: 12px; color: #999;">Custo: R$ ${recipe.cost.toFixed(2).replace('.', ',')} | Preço atual: R$ ${recipe.price.toFixed(2).replace('.', ',')}</div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <input type="number" id="vendas_${recipe.id}" placeholder="0" min="0" value="0"
+                               style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; text-align: center;">
+                        <span style="color: #999; font-size: 12px; white-space: nowrap;">un/mês</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function calcularFinanceiro() {
+            const taxaPix    = parseFloat(document.getElementById('taxaPix').value) / 100 || 0;
+            const taxaDebito = parseFloat(document.getElementById('taxaDebito').value) / 100 || 0;
+            const taxaCredito= parseFloat(document.getElementById('taxaCredito').value) / 100 || 0;
+            const taxaVR     = parseFloat(document.getElementById('taxaVR').value) / 100 || 0;
+            const metaMargem = parseFloat(document.getElementById('metaMargem').value) / 100 || 0.30;
+
+            const totalFixo = fixedCosts.reduce((sum, c) => sum + (c.value || 0), 0);
+            const totalVendas = recipes.reduce((sum, r) => {
+                const v = parseFloat(document.getElementById(`vendas_${r.id}`)?.value) || 0;
+                return sum + v;
+            }, 0);
+
+            // Custo fixo por unidade vendida
+            const custoFixoUnit = totalVendas > 0 ? totalFixo / totalVendas : 0;
+
+            // Calcular preço ideal por receita
+            const precoIdealBody = document.getElementById('precoIdealTable');
+            precoIdealBody.innerHTML = recipes.map(recipe => {
+                const custoTotal = recipe.cost + custoFixoUnit;
+
+                // Preço ideal = custo / (1 - taxa - margem)
+                const precoIdealPix     = custoTotal / (1 - taxaPix - metaMargem);
+                const precoIdealDebito  = custoTotal / (1 - taxaDebito - metaMargem);
+                const precoIdealCredito = custoTotal / (1 - taxaCredito - metaMargem);
+                const precoIdealVR      = custoTotal / (1 - taxaVR - metaMargem);
+
+                function badge(ideal, atual) {
+                    const diff = ideal - atual;
+                    const cor = diff > 2 ? '#e74c3c' : diff < -2 ? '#27ae60' : '#f39c12';
+                    const seta = diff > 2 ? '↑' : diff < -2 ? '↓' : '≈';
+                    return `<strong style="color:${cor};">${seta} R$ ${ideal.toFixed(2).replace('.', ',')}</strong>`;
+                }
+
+                return `
+                    <tr>
+                        <td><strong>${recipe.name}</strong></td>
+                        <td class="text-right">R$ ${recipe.cost.toFixed(2).replace('.', ',')}</td>
+                        <td class="text-right">R$ ${custoFixoUnit.toFixed(2).replace('.', ',')}</td>
+                        <td class="text-right">R$ ${recipe.price.toFixed(2).replace('.', ',')}</td>
+                        <td class="text-right">${badge(precoIdealPix, recipe.price)}</td>
+                        <td class="text-right">${badge(precoIdealDebito, recipe.price)}</td>
+                        <td class="text-right">${badge(precoIdealCredito, recipe.price)}</td>
+                        <td class="text-right">${badge(precoIdealVR, recipe.price)}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            // Projeção de lucro mensal
+            let receitaBruta = 0;
+            let custoInsumos = 0;
+            let detalheReceitas = [];
+
+            recipes.forEach(recipe => {
+                const vendas = parseFloat(document.getElementById(`vendas_${recipe.id}`)?.value) || 0;
+                const receita = vendas * recipe.price;
+                const custo = vendas * recipe.cost;
+                receitaBruta += receita;
+                custoInsumos += custo;
+                if (vendas > 0) {
+                    detalheReceitas.push({ name: recipe.name, vendas, receita, custo });
+                }
+            });
+
+            const lucroAntestaxas = receitaBruta - custoInsumos - totalFixo;
+            // Estimativa de taxa média (assumindo mix 30% pix, 20% débito, 40% crédito, 10% VR)
+            const taxaMedia = (taxaPix * 0.30) + (taxaDebito * 0.20) + (taxaCredito * 0.40) + (taxaVR * 0.10);
+            const totalTaxas = receitaBruta * taxaMedia;
+            const lucroLiquido = lucroAntestaxas - totalTaxas;
+            const margemReal = receitaBruta > 0 ? ((lucroLiquido / receitaBruta) * 100).toFixed(1) : 0;
+            const corMargem = margemReal >= 20 ? '#27ae60' : margemReal >= 10 ? '#f39c12' : '#e74c3c';
+
+            document.getElementById('projecaoResultado').innerHTML = `
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-bottom: 2rem;">
+                    <div class="metric-card">
+                        <div class="metric-label">Receita Bruta</div>
+                        <div class="metric-value">R$ ${receitaBruta.toFixed(2).replace('.', ',')}</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Custo Insumos</div>
+                        <div class="metric-value" style="color: #e74c3c;">R$ ${custoInsumos.toFixed(2).replace('.', ',')}</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Custos Fixos</div>
+                        <div class="metric-value" style="color: #e74c3c;">R$ ${totalFixo.toFixed(2).replace('.', ',')}</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Taxas (est.)</div>
+                        <div class="metric-value" style="color: #e74c3c;">R$ ${totalTaxas.toFixed(2).replace('.', ',')}</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Lucro Líquido</div>
+                        <div class="metric-value" style="color: ${lucroLiquido >= 0 ? '#27ae60' : '#e74c3c'};">R$ ${lucroLiquido.toFixed(2).replace('.', ',')}</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Margem Real</div>
+                        <div class="metric-value" style="color: ${corMargem};">${margemReal}%</div>
+                    </div>
+                </div>
+
+                <div class="info-box" style="margin-bottom: 1rem;">
+                    💡 <strong>Setas de referência:</strong>
+                    <span style="color:#e74c3c; font-weight:600;"> ↑ Preço atual abaixo do ideal</span> &nbsp;|&nbsp;
+                    <span style="color:#f39c12; font-weight:600;"> ≈ Preço próximo do ideal</span> &nbsp;|&nbsp;
+                    <span style="color:#27ae60; font-weight:600;"> ↓ Preço acima do ideal (ótimo!)</span>
+                </div>
+            `;
+
+            // Projeção por receita
+            const projecaoPorReceita = document.getElementById('projecaoPorReceita');
+            if (projecaoPorReceita) {
+                let totalRow = { receita: 0, custo: 0, fixo: 0, taxas: 0, lucro: 0 };
+
+                projecaoPorReceita.innerHTML = recipes.map(recipe => {
+                    const vendas = parseFloat(document.getElementById(`vendas_${recipe.id}`)?.value) || 0;
+                    if (vendas === 0) return '';
+
+                    const receitaItem    = vendas * recipe.price;
+                    const custoItem      = vendas * recipe.cost;
+                    const fixoItem       = custoFixoUnit * vendas;
+                    const taxasItem      = receitaItem * taxaMedia;
+                    const lucroItem      = receitaItem - custoItem - fixoItem - taxasItem;
+                    const margemItem     = receitaItem > 0 ? ((lucroItem / receitaItem) * 100).toFixed(1) : 0;
+                    const corItem        = margemItem >= 20 ? '#27ae60' : margemItem >= 10 ? '#f39c12' : '#e74c3c';
+
+                    totalRow.receita += receitaItem;
+                    totalRow.custo   += custoItem;
+                    totalRow.fixo    += fixoItem;
+                    totalRow.taxas   += taxasItem;
+                    totalRow.lucro   += lucroItem;
+
+                    return `
+                        <tr>
+                            <td><strong>${recipe.name}</strong></td>
+                            <td class="text-right">${vendas}</td>
+                            <td class="text-right">R$ ${receitaItem.toFixed(2).replace('.', ',')}</td>
+                            <td class="text-right" style="color:#e74c3c;">R$ ${custoItem.toFixed(2).replace('.', ',')}</td>
+                            <td class="text-right" style="color:#e74c3c;">R$ ${fixoItem.toFixed(2).replace('.', ',')}</td>
+                            <td class="text-right" style="color:#e74c3c;">R$ ${taxasItem.toFixed(2).replace('.', ',')}</td>
+                            <td class="text-right"><strong style="color:${lucroItem >= 0 ? '#27ae60' : '#e74c3c'};">R$ ${lucroItem.toFixed(2).replace('.', ',')}</strong></td>
+                            <td class="text-right"><strong style="color:${corItem};">${margemItem}%</strong></td>
+                        </tr>
+                    `;
+                }).join('');
+
+                // Linha de totais
+                const margemTotal = totalRow.receita > 0 ? ((totalRow.lucro / totalRow.receita) * 100).toFixed(1) : 0;
+                const corTotal    = margemTotal >= 20 ? '#27ae60' : margemTotal >= 10 ? '#f39c12' : '#e74c3c';
+
+                projecaoPorReceita.innerHTML += `
+                    <tr style="background: #f0f0f0; font-weight: 700; border-top: 2px solid #ccc;">
+                        <td><strong>TOTAL GERAL</strong></td>
+                        <td class="text-right">—</td>
+                        <td class="text-right">R$ ${totalRow.receita.toFixed(2).replace('.', ',')}</td>
+                        <td class="text-right" style="color:#e74c3c;">R$ ${totalRow.custo.toFixed(2).replace('.', ',')}</td>
+                        <td class="text-right" style="color:#e74c3c;">R$ ${totalRow.fixo.toFixed(2).replace('.', ',')}</td>
+                        <td class="text-right" style="color:#e74c3c;">R$ ${totalRow.taxas.toFixed(2).replace('.', ',')}</td>
+                        <td class="text-right"><strong style="color:${totalRow.lucro >= 0 ? '#27ae60' : '#e74c3c'};">R$ ${totalRow.lucro.toFixed(2).replace('.', ',')}</strong></td>
+                        <td class="text-right"><strong style="color:${corTotal};">${margemTotal}%</strong></td>
+                    </tr>
+                `;
+            }
+
+            document.getElementById('resultadosFinanceiro').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
