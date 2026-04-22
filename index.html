@@ -5,217 +5,166 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Ficha Técnica - Hamburgueria & Pizzaria</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+        :root {
+            --bg: #242424;
+            --bg2: #1e1e1e;
+            --bg3: #2c2c2c;
+            --bg4: #333;
+            --border: #3a3a3a;
+            --border2: #444;
+            --accent: #f97316;
+            --accent-hover: #ea6a0a;
+            --text: #e8e8e8;
+            --text2: #aaa;
+            --text3: #666;
+            --success: #27ae60;
+            --danger: #e74c3c;
+            --warning: #f39c12;
         }
 
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            color: #333;
-            background-color: #f5f5f5;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: var(--text);
+            background-color: var(--bg2);
             line-height: 1.6;
         }
 
         .header {
-            background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
-            color: white;
-            padding: 2rem;
+            background: var(--bg2);
+            color: var(--text);
+            padding: 1.5rem 2rem;
             text-align: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border-bottom: 2px solid var(--accent);
         }
 
-        .header h1 {
-            font-size: 28px;
-            margin-bottom: 8px;
-        }
+        .header h1 { font-size: 26px; margin-bottom: 4px; color: #fff; }
+        .header p { font-size: 13px; color: var(--text3); }
 
-        .header p {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1.5rem;
-        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 1.5rem; }
 
         .tabs {
             display: flex;
-            gap: 8px;
-            border-bottom: 2px solid #ddd;
-            margin-bottom: 2rem;
+            gap: 2px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 0;
             overflow-x: auto;
-            background: white;
-            padding: 0 1rem;
+            background: var(--bg2);
+            padding: 0 8px;
             border-radius: 8px 8px 0 0;
         }
 
         .tab-button {
-            padding: 12px 20px;
+            padding: 12px 18px;
             background: none;
             border: none;
             cursor: pointer;
-            font-size: 15px;
-            color: #666;
-            border-bottom: 3px solid transparent;
-            transition: all 0.3s;
+            font-size: 13px;
+            color: var(--text3);
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
             font-weight: 500;
             white-space: nowrap;
         }
 
-        .tab-button:hover {
-            color: #ff6b35;
-        }
-
-        .tab-button.active {
-            color: #ff6b35;
-            border-bottom-color: #ff6b35;
-        }
+        .tab-button:hover { color: var(--accent); }
+        .tab-button.active { color: var(--accent); border-bottom-color: var(--accent); }
 
         .tab-content {
             display: none;
-            background: white;
+            background: var(--bg);
             padding: 1.5rem;
             border-radius: 0 0 8px 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+            border-top: none;
         }
 
-        .tab-content.active {
-            display: block;
-        }
+        .tab-content.active { display: block; }
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            margin-bottom: 16px;
-        }
+        .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
 
         label {
-            font-size: 13px;
+            font-size: 11px;
             font-weight: 600;
-            color: #555;
+            color: var(--text3);
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        input, select {
+        input, select, textarea {
             padding: 10px 12px;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border2);
             border-radius: 6px;
             font-size: 14px;
             font-family: inherit;
             transition: border-color 0.2s;
+            background: var(--bg4);
+            color: var(--text);
         }
 
-        input:focus, select:focus {
+        input::placeholder { color: var(--text3); }
+        input:focus, select:focus, textarea:focus {
             outline: none;
-            border-color: #ff6b35;
-            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.15);
         }
 
         button {
-            padding: 11px 18px;
-            background: #ff6b35;
-            color: white;
+            padding: 10px 18px;
+            background: var(--accent);
+            color: #fff;
             border: none;
             border-radius: 6px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             transition: all 0.2s;
             display: inline-block;
         }
 
-        button:hover {
-            background: #e5541f;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
-        }
-
-        button:active {
-            transform: translateY(0);
-        }
+        button:hover { background: var(--accent-hover); transform: translateY(-1px); }
+        button:active { transform: translateY(0); }
 
         button.secondary {
-            background: #f0f0f0;
-            color: #333;
-            border: 1px solid #ddd;
+            background: var(--bg4);
+            color: var(--text2);
+            border: 1px solid var(--border2);
         }
 
-        button.secondary:hover {
-            background: #e8e8e8;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
+        button.secondary:hover { background: #3d3d3d; border-color: var(--accent); color: var(--text); }
 
-        button.danger {
-            background: #e74c3c;
-            padding: 6px 12px;
-            font-size: 13px;
-        }
+        button.danger { background: #5a1f1f; color: #ff6b6b; border: 1px solid #7a2f2f; padding: 6px 12px; font-size: 12px; }
+        button.danger:hover { background: #6e2525; }
 
-        button.danger:hover {
-            background: #c0392b;
-        }
+        button.success { background: #1a4a2e; color: #4ade80; border: 1px solid #2a6a3e; padding: 8px 14px; font-size: 13px; }
+        button.success:hover { background: #1f5a37; }
 
-        button.success {
-            background: #27ae60;
-            padding: 8px 14px;
-            font-size: 13px;
-        }
-
-        button.success:hover {
-            background: #229954;
-        }
-
-        /* MODAL STYLES */
         .modal {
             display: none;
             position: fixed;
             z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            animation: fadeIn 0.3s ease;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.75);
+            animation: fadeIn 0.2s ease;
         }
 
-        .modal.show {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+        .modal.show { display: flex; align-items: center; justify-content: center; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
         .modal-content {
-            background-color: white;
+            background: var(--bg3);
+            border: 1px solid var(--border2);
             padding: 2rem;
             border-radius: 12px;
             width: 90%;
             max-width: 800px;
             max-height: 90vh;
             overflow-y: auto;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            animation: slideUp 0.3s ease;
-        }
-
-        @keyframes slideUp {
-            from {
-                transform: translateY(50px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            animation: slideUp 0.2s ease;
         }
 
         .modal-header {
@@ -223,21 +172,18 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1.5rem;
-            border-bottom: 2px solid #f0f0f0;
+            border-bottom: 1px solid var(--border);
             padding-bottom: 1rem;
         }
 
-        .modal-header h2 {
-            font-size: 20px;
-            color: #333;
-        }
+        .modal-header h2 { font-size: 18px; color: #fff; }
 
         .modal-close {
             background: none;
             border: none;
-            font-size: 24px;
+            font-size: 22px;
             cursor: pointer;
-            color: #999;
+            color: var(--text3);
             padding: 0;
             width: 30px;
             height: 30px;
@@ -246,21 +192,10 @@
             justify-content: center;
         }
 
-        .modal-close:hover {
-            color: #333;
-        }
+        .modal-close:hover { color: var(--text); transform: none; }
 
-        .ingredient-search {
-            margin-bottom: 1.5rem;
-        }
-
-        .ingredient-search input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
-        }
+        .ingredient-search { margin-bottom: 1.5rem; }
+        .ingredient-search input { width: 100%; }
 
         .ingredient-row {
             display: grid;
@@ -268,55 +203,36 @@
             gap: 12px;
             align-items: center;
             padding: 12px;
-            border-bottom: 1px solid #f0f0f0;
-            background: #fafafa;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg4);
             margin-bottom: 8px;
             border-radius: 6px;
         }
 
-        .ingredient-row input {
-            padding: 8px;
-            font-size: 13px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-
-        .ingredient-name {
-            font-weight: 500;
-            color: #333;
-        }
-
-        .ingredient-unit {
-            color: #999;
-            font-size: 12px;
-        }
-
-        .ingredient-price {
-            color: #ff6b35;
-            font-weight: 600;
-        }
+        .ingredient-row input { padding: 8px; font-size: 13px; }
+        .ingredient-name { font-weight: 500; color: var(--text); }
+        .ingredient-unit { color: var(--text3); font-size: 12px; }
+        .ingredient-price { color: var(--accent); font-weight: 600; }
 
         .modal-footer {
             display: flex;
             gap: 12px;
             justify-content: flex-end;
             padding-top: 1.5rem;
-            border-top: 2px solid #f0f0f0;
+            border-top: 1px solid var(--border);
         }
 
         .recipe-card, .cost-card {
-            background: #fafafa;
-            border: 1px solid #e0e0e0;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--accent);
             border-radius: 8px;
             padding: 1.25rem;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             transition: all 0.2s;
         }
 
-        .recipe-card:hover {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            border-color: #ff6b35;
-        }
+        .recipe-card:hover { border-color: var(--accent); background: #303030; }
 
         .recipe-header {
             display: flex;
@@ -325,179 +241,96 @@
             margin-bottom: 12px;
         }
 
-        .recipe-name {
-            font-weight: 600;
-            font-size: 16px;
-            color: #333;
-        }
+        .recipe-name { font-weight: 600; font-size: 15px; color: var(--accent); }
 
         .recipe-details {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 12px;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 8px;
             font-size: 13px;
         }
 
         .detail-item {
-            padding: 8px;
-            background: white;
+            padding: 8px 10px;
+            background: var(--bg);
             border-radius: 6px;
-            border-left: 3px solid #ff6b35;
+            border-left: 2px solid var(--accent);
         }
 
-        .detail-label {
-            color: #999;
-            font-size: 11px;
-            text-transform: uppercase;
-            margin-bottom: 4px;
-        }
-
-        .detail-value {
-            font-weight: 600;
-            font-size: 15px;
-            color: #333;
-        }
-
-        .detail-value.success {
-            color: #27ae60;
-        }
+        .detail-label { color: var(--text3); font-size: 10px; text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px; }
+        .detail-value { font-weight: 600; font-size: 14px; color: var(--text); }
+        .detail-value.success { color: var(--success); }
 
         .metrics-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
             margin-bottom: 2rem;
         }
 
         .metric-card {
-            background: linear-gradient(135deg, #fff5f1 0%, #fff9f7 100%);
-            border: 1px solid #ffe0d6;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-top: 2px solid var(--accent);
             border-radius: 8px;
             padding: 1.25rem;
             text-align: center;
         }
 
-        .metric-label {
-            font-size: 12px;
-            color: #999;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
-        .metric-value {
-            font-size: 24px;
-            font-weight: 700;
-            color: #ff6b35;
-        }
+        .metric-label { font-size: 11px; color: var(--text3); text-transform: uppercase; margin-bottom: 10px; font-weight: 600; letter-spacing: 0.5px; }
+        .metric-value { font-size: 22px; font-weight: 700; color: var(--accent); }
 
         .section-title {
-            font-size: 17px;
+            font-size: 12px;
             font-weight: 600;
             margin-top: 1.5rem;
             margin-bottom: 12px;
-            color: #333;
+            color: var(--accent);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
             padding-bottom: 8px;
-            border-bottom: 2px solid #f0f0f0;
+            border-bottom: 1px solid var(--border);
         }
 
-        .two-col {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13px;
-            margin-top: 1rem;
-        }
-
-        thead {
-            background: #f9f9f9;
-            border-bottom: 2px solid #e0e0e0;
-        }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 1rem; }
+        thead { background: var(--bg2); border-bottom: 1px solid var(--border2); }
 
         th {
             padding: 12px 8px;
             text-align: left;
             font-weight: 600;
-            color: #666;
+            color: var(--accent);
             text-transform: uppercase;
-            font-size: 11px;
-            letter-spacing: 0.5px;
+            font-size: 10px;
+            letter-spacing: 0.8px;
         }
 
-        td {
-            padding: 12px 8px;
-            border-bottom: 1px solid #f0f0f0;
-        }
+        td { padding: 12px 8px; border-bottom: 1px solid var(--border); color: var(--text); }
+        tbody tr:hover { background: var(--bg3); }
 
-        tbody tr:hover {
-            background: #f9f9f9;
-        }
+        .text-right { text-align: right; }
+        .text-success { color: var(--success); font-weight: 600; }
+        .text-danger { color: var(--danger); }
+        .text-secondary { color: var(--text3); font-size: 12px; }
 
-        .text-right {
-            text-align: right;
-        }
+        .empty-state { text-align: center; padding: 2rem; color: var(--text3); }
+        .empty-state p { margin-bottom: 1rem; }
 
-        .text-success {
-            color: #27ae60;
-            font-weight: 600;
-        }
-
-        .text-danger {
-            color: #e74c3c;
-        }
-
-        .text-secondary {
-            color: #999;
-            font-size: 12px;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 2rem;
-            color: #999;
-        }
-
-        .empty-state p {
-            margin-bottom: 1rem;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 8px;
-            margin-top: 1.5rem;
-            flex-wrap: wrap;
-        }
+        .button-group { display: flex; gap: 8px; margin-top: 1.5rem; flex-wrap: wrap; }
 
         .cost-summary {
-            background: linear-gradient(135deg, #fff5f1 0%, #fff9f7 100%);
-            border: 2px solid #ff6b35;
+            background: var(--bg3);
+            border: 1px solid var(--accent);
             border-radius: 8px;
             padding: 1.5rem;
             margin-top: 1.5rem;
             text-align: center;
         }
 
-        .cost-summary-label {
-            font-size: 13px;
-            color: #999;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-
-        .cost-summary-value {
-            font-size: 32px;
-            font-weight: 700;
-            color: #ff6b35;
-        }
+        .cost-summary-label { font-size: 12px; color: var(--text3); text-transform: uppercase; margin-bottom: 10px; font-weight: 600; }
+        .cost-summary-value { font-size: 32px; font-weight: 700; color: var(--accent); }
 
         .insumo-row {
             display: grid;
@@ -505,136 +338,79 @@
             gap: 8px;
             align-items: center;
             padding: 12px;
-            border-bottom: 1px solid #f0f0f0;
-            background: #fafafa;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg3);
             margin-bottom: 8px;
             border-radius: 6px;
         }
 
-        .insumo-row input {
-            padding: 8px;
-            font-size: 12px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-
-        .insumo-name {
-            font-weight: 500;
-            color: #333;
-            padding: 8px 0;
-            font-size: 13px;
-        }
-
-        .insumo-unit {
-            color: #999;
-            font-size: 11px;
-            margin-top: 2px;
-        }
+        .insumo-row input { padding: 8px; font-size: 12px; }
+        .insumo-name { font-weight: 500; color: var(--text); padding: 8px 0; font-size: 13px; }
+        .insumo-unit { color: var(--text3); font-size: 11px; margin-top: 2px; }
 
         .insumo-price-display {
             padding: 8px;
-            background: white;
+            background: var(--bg);
             border-radius: 4px;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border2);
             font-weight: 600;
-            color: #ff6b35;
+            color: var(--accent);
             font-size: 12px;
             text-align: center;
         }
 
         .insumo-price-kg {
             padding: 8px;
-            background: #e8f4f8;
+            background: #1a2a3a;
             border-radius: 4px;
-            border: 1px solid #b5d9e8;
+            border: 1px solid #2a4a6a;
             font-weight: 600;
-            color: #2c5aa0;
+            color: #5ba3d0;
             font-size: 11px;
             text-align: center;
         }
 
-        .search-insumo {
-            margin-bottom: 1.5rem;
-        }
-
-        .search-insumo input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
-        }
+        .search-insumo { margin-bottom: 1.5rem; }
+        .search-insumo input { width: 100%; }
 
         .add-insumo-form {
-            background: #f0f7ff;
-            border: 1px solid #d0e8ff;
+            background: #1a2535;
+            border: 1px solid #2a3a55;
             border-radius: 8px;
             padding: 1.5rem;
             margin-bottom: 2rem;
         }
 
-        .add-insumo-form .section-title {
-            margin-top: 0;
-            border: none;
-            padding: 0;
-        }
+        .add-insumo-form .section-title { margin-top: 0; border: none; padding: 0; }
 
-        .form-row {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
+        .form-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 12px; margin-bottom: 12px; }
 
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 22px;
-            }
-
-            .container {
-                padding: 1rem;
-            }
-
-            .two-col {
-                grid-template-columns: 1fr;
-            }
-
-            .tabs {
-                padding: 0 0.5rem;
-            }
-
-            .tab-button {
-                padding: 10px 12px;
-                font-size: 13px;
-            }
-
-            .metrics-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .modal-content {
-                width: 95%;
-                padding: 1.5rem;
-            }
-
-            .ingredient-row, .insumo-row {
-                grid-template-columns: 1fr;
-            }
-
-            .form-row {
-                grid-template-columns: 1fr;
-            }
+            .header h1 { font-size: 20px; }
+            .container { padding: 1rem; }
+            .two-col { grid-template-columns: 1fr; }
+            .tabs { padding: 0 4px; }
+            .tab-button { padding: 10px 10px; font-size: 12px; }
+            .metrics-grid { grid-template-columns: 1fr 1fr; }
+            .modal-content { width: 95%; padding: 1.25rem; }
+            .ingredient-row, .insumo-row { grid-template-columns: 1fr; }
+            .form-row { grid-template-columns: 1fr; }
         }
 
         .info-box {
-            background: #e8f4f8;
-            border-left: 4px solid #3498db;
-            padding: 12px 16px;
-            border-radius: 6px;
+            background: #1a2535;
+            border-left: 3px solid var(--accent);
+            border-radius: 0 6px 6px 0;
+            padding: 10px 14px;
             margin-bottom: 1rem;
             font-size: 13px;
-            color: #2c3e50;
+            color: var(--text2);
         }
+
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg2); }
+        ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
     </style>
 </head>
 <body>
@@ -715,7 +491,7 @@
                 </div>
                 <div class="form-group">
                     <label for="recipeCategoria">Categoria</label>
-                    <select id="recipeCategoria" style="padding:10px; border:1px solid #ddd; border-radius:6px; font-size:14px; width:100%;">
+                    <select id="recipeCategoria" style="padding:10px; border:1px solid #444; border-radius:6px; font-size:14px; width:100%;">
                         <option value="Pizza">🍕 Pizza</option>
                         <option value="Burger">🍔 Burger</option>
                         <option value="Porção">🍟 Porção</option>
@@ -743,7 +519,7 @@
                 <div class="search-insumo" style="margin-bottom:0;">
                     <input type="text" id="recipeSearch" placeholder="🔍 Buscar receita..." onkeyup="filterRecipes()">
                 </div>
-                <select id="categoriaFiltro" onchange="filterRecipes()" style="padding:10px; border:1px solid #ddd; border-radius:6px; font-size:14px; min-width:140px;">
+                <select id="categoriaFiltro" onchange="filterRecipes()" style="padding:10px; border:1px solid #444; border-radius:6px; font-size:14px; min-width:140px;">
                     <option value="">Todas as categorias</option>
                     <option value="Pizza">🍕 Pizza</option>
                     <option value="Burger">🍔 Burger</option>
@@ -779,10 +555,10 @@
             </div>
             <p class="text-secondary">Custos que não variam com a quantidade produzida (aluguel, salários, energia, internet, etc.)</p>
             
-            <div style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem; border: 1px solid #eee;">
+            <div style="background: #2c2c2c; padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem; border: 1px solid #3a3a3a;">
                 <div style="display: grid; grid-template-columns: 2fr 150px auto; gap: 12px; margin-bottom: 1rem;">
-                    <input type="text" id="fixedCostName" placeholder="Ex: Aluguel, Salário, Energia..." style="padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
-                    <input type="number" id="fixedCostValue" placeholder="R$ 0,00" step="0.01" min="0" style="padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+                    <input type="text" id="fixedCostName" placeholder="Ex: Aluguel, Salário, Energia..." style="padding: 12px; border: 1px solid #444; border-radius: 6px; font-size: 14px;">
+                    <input type="number" id="fixedCostValue" placeholder="R$ 0,00" step="0.01" min="0" style="padding: 12px; border: 1px solid #444; border-radius: 6px; font-size: 14px;">
                     <button onclick="addFixedCostBtn()" style="background: #27ae60; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; padding: 12px 20px;">+ Adicionar</button>
                 </div>
             </div>
@@ -795,10 +571,10 @@
             </div>
             <p class="text-secondary">Custos que variam conforme a quantidade produzida (embalagem, combustível, mão de obra, etc.)</p>
             
-            <div style="background: #f9f9f9; padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem; border: 1px solid #eee;">
+            <div style="background: #2c2c2c; padding: 1.5rem; border-radius: 8px; margin-bottom: 1.5rem; border: 1px solid #3a3a3a;">
                 <div style="display: grid; grid-template-columns: 2fr 150px auto; gap: 12px; margin-bottom: 1rem;">
-                    <input type="text" id="variableCostName" placeholder="Ex: Embalagem, Combustível, Gás..." style="padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
-                    <input type="number" id="variableCostValue" placeholder="R$ 0,00" step="0.01" min="0" style="padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px;">
+                    <input type="text" id="variableCostName" placeholder="Ex: Embalagem, Combustível, Gás..." style="padding: 12px; border: 1px solid #444; border-radius: 6px; font-size: 14px;">
+                    <input type="number" id="variableCostValue" placeholder="R$ 0,00" step="0.01" min="0" style="padding: 12px; border: 1px solid #444; border-radius: 6px; font-size: 14px;">
                     <button onclick="addVariableCostBtn()" style="background: #3498db; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; padding: 12px 20px;">+ Adicionar</button>
                 </div>
             </div>
@@ -866,32 +642,32 @@
             <p class="text-secondary" style="margin-bottom: 1rem;">Informe as taxas cobradas pela sua maquininha em cada modalidade.</p>
 
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 2rem;">
-                <div style="background: #f9f9f9; padding: 1.25rem; border-radius: 8px; border: 1px solid #eee;">
-                    <div style="font-size: 12px; color: #999; text-transform: uppercase; margin-bottom: 8px; font-weight: 600;">PIX</div>
+                <div style="background: #2c2c2c; padding: 1.25rem; border-radius: 8px; border: 1px solid #3a3a3a;">
+                    <div style="font-size: 12px; color: #777; text-transform: uppercase; margin-bottom: 8px; font-weight: 600;">PIX</div>
                     <div style="display: flex; align-items: center; gap: 8px;">
-                        <input type="number" id="taxaPix" value="0" step="0.01" min="0" max="100" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; font-weight: 600;">
-                        <span style="color: #666; font-weight: 600;">%</span>
+                        <input type="number" id="taxaPix" value="0" step="0.01" min="0" max="100" style="width: 100%; padding: 10px; border: 1px solid #444; border-radius: 6px; font-size: 16px; font-weight: 600;">
+                        <span style="color: #aaa; font-weight: 600;">%</span>
                     </div>
                 </div>
-                <div style="background: #f9f9f9; padding: 1.25rem; border-radius: 8px; border: 1px solid #eee;">
-                    <div style="font-size: 12px; color: #999; text-transform: uppercase; margin-bottom: 8px; font-weight: 600;">Débito</div>
+                <div style="background: #2c2c2c; padding: 1.25rem; border-radius: 8px; border: 1px solid #3a3a3a;">
+                    <div style="font-size: 12px; color: #777; text-transform: uppercase; margin-bottom: 8px; font-weight: 600;">Débito</div>
                     <div style="display: flex; align-items: center; gap: 8px;">
-                        <input type="number" id="taxaDebito" value="1.5" step="0.01" min="0" max="100" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; font-weight: 600;">
-                        <span style="color: #666; font-weight: 600;">%</span>
+                        <input type="number" id="taxaDebito" value="1.5" step="0.01" min="0" max="100" style="width: 100%; padding: 10px; border: 1px solid #444; border-radius: 6px; font-size: 16px; font-weight: 600;">
+                        <span style="color: #aaa; font-weight: 600;">%</span>
                     </div>
                 </div>
-                <div style="background: #f9f9f9; padding: 1.25rem; border-radius: 8px; border: 1px solid #eee;">
-                    <div style="font-size: 12px; color: #999; text-transform: uppercase; margin-bottom: 8px; font-weight: 600;">Crédito à Vista</div>
+                <div style="background: #2c2c2c; padding: 1.25rem; border-radius: 8px; border: 1px solid #3a3a3a;">
+                    <div style="font-size: 12px; color: #777; text-transform: uppercase; margin-bottom: 8px; font-weight: 600;">Crédito à Vista</div>
                     <div style="display: flex; align-items: center; gap: 8px;">
-                        <input type="number" id="taxaCredito" value="2.99" step="0.01" min="0" max="100" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; font-weight: 600;">
-                        <span style="color: #666; font-weight: 600;">%</span>
+                        <input type="number" id="taxaCredito" value="2.99" step="0.01" min="0" max="100" style="width: 100%; padding: 10px; border: 1px solid #444; border-radius: 6px; font-size: 16px; font-weight: 600;">
+                        <span style="color: #aaa; font-weight: 600;">%</span>
                     </div>
                 </div>
-                <div style="background: #f9f9f9; padding: 1.25rem; border-radius: 8px; border: 1px solid #eee;">
-                    <div style="font-size: 12px; color: #999; text-transform: uppercase; margin-bottom: 8px; font-weight: 600;">VR/VA</div>
+                <div style="background: #2c2c2c; padding: 1.25rem; border-radius: 8px; border: 1px solid #3a3a3a;">
+                    <div style="font-size: 12px; color: #777; text-transform: uppercase; margin-bottom: 8px; font-weight: 600;">VR/VA</div>
                     <div style="display: flex; align-items: center; gap: 8px;">
-                        <input type="number" id="taxaVR" value="1.2" step="0.01" min="0" max="100" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; font-weight: 600;">
-                        <span style="color: #666; font-weight: 600;">%</span>
+                        <input type="number" id="taxaVR" value="1.2" step="0.01" min="0" max="100" style="width: 100%; padding: 10px; border: 1px solid #444; border-radius: 6px; font-size: 16px; font-weight: 600;">
+                        <span style="color: #aaa; font-weight: 600;">%</span>
                     </div>
                 </div>
             </div>
@@ -899,10 +675,10 @@
             <!-- META DE MARGEM -->
             <div class="section-title">Meta de Margem de Lucro</div>
             <p class="text-secondary" style="margin-bottom: 1rem;">Defina qual margem de lucro líquido você quer ter sobre cada venda.</p>
-            <div style="background: #f9f9f9; padding: 1.25rem; border-radius: 8px; border: 1px solid #eee; display: flex; align-items: center; gap: 16px; margin-bottom: 2rem;">
-                <input type="number" id="metaMargem" value="30" step="1" min="0" max="100" style="width: 120px; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 20px; font-weight: 700; text-align: center;">
-                <span style="font-size: 20px; font-weight: 700; color: #666;">%</span>
-                <span style="color: #999; font-size: 13px;">de lucro líquido sobre o preço de venda</span>
+            <div style="background: #2c2c2c; padding: 1.25rem; border-radius: 8px; border: 1px solid #3a3a3a; display: flex; align-items: center; gap: 16px; margin-bottom: 2rem;">
+                <input type="number" id="metaMargem" value="30" step="1" min="0" max="100" style="width: 120px; padding: 10px; border: 1px solid #444; border-radius: 6px; font-size: 20px; font-weight: 700; text-align: center;">
+                <span style="font-size: 20px; font-weight: 700; color: #aaa;">%</span>
+                <span style="color: #777; font-size: 13px;">de lucro líquido sobre o preço de venda</span>
             </div>
 
             <!-- PROJEÇÃO MENSAL -->
@@ -969,25 +745,25 @@
 
             <!-- UPLOAD COM IA -->
             <div class="section-title">📸 Ler Nota com Inteligência Artificial</div>
-            <div style="background:#f0f7ff; padding:1.5rem; border-radius:8px; border:2px dashed #3498db; margin-bottom:1.5rem; text-align:center;">
+            <div style="background:#1a2535; padding:1.5rem; border-radius:8px; border:2px dashed #f97316; margin-bottom:1.5rem; text-align:center;">
                 <div style="font-size:48px; margin-bottom:12px;">📄</div>
-                <div style="font-weight:600; color:#333; margin-bottom:8px;">Tire uma foto ou faça upload da nota fiscal</div>
-                <div style="color:#999; font-size:13px; margin-bottom:1.5rem;">Formatos aceitos: JPG, PNG, PDF</div>
+                <div style="font-weight:600; color:#e8e8e8; margin-bottom:8px;">Tire uma foto ou faça upload da nota fiscal</div>
+                <div style="color:#777; font-size:13px; margin-bottom:1.5rem;">Formatos aceitos: JPG, PNG, PDF</div>
                 <input type="file" id="notaUpload" accept="image/*,application/pdf" style="display:none;" onchange="lerNotaComIA()">
                 <button onclick="document.getElementById('notaUpload').click()" style="background:#3498db; padding:14px 28px; font-size:15px;">
                     📤 Fazer Upload da Nota
                 </button>
                 <div id="notaUploadPreview" style="margin-top:1rem; display:none;">
-                    <img id="notaImgPreview" style="max-width:100%; max-height:300px; border-radius:8px; border:1px solid #ddd;" src="">
+                    <img id="notaImgPreview" style="max-width:100%; max-height:300px; border-radius:8px; border:1px solid #444;" src="">
                 </div>
             </div>
 
             <!-- STATUS DA LEITURA -->
             <div id="notaIAStatus" style="display:none; text-align:center; padding:2rem;">
                 <div style="font-size:32px; margin-bottom:12px;">🤖</div>
-                <div style="font-weight:600; color:#333; margin-bottom:8px;" id="notaIAStatusText">Lendo sua nota...</div>
-                <div style="color:#999; font-size:13px;">A IA está analisando os itens da nota fiscal</div>
-                <div style="margin-top:16px; height:4px; background:#f0f0f0; border-radius:2px; overflow:hidden;">
+                <div style="font-weight:600; color:#e8e8e8; margin-bottom:8px;" id="notaIAStatusText">Lendo sua nota...</div>
+                <div style="color:#777; font-size:13px;">A IA está analisando os itens da nota fiscal</div>
+                <div style="margin-top:16px; height:4px; background:#333; border-radius:2px; overflow:hidden;">
                     <div style="height:100%; background:#3498db; border-radius:2px; animation:loading 1.5s ease-in-out infinite;" id="notaProgressBar"></div>
                 </div>
             </div>
@@ -1002,7 +778,7 @@
 
             <div class="section-title" style="margin-top:1.5rem;">✏️ Ou preencha manualmente</div>
 
-            <div style="background:#f9f9f9; padding:1.5rem; border-radius:8px; border:1px solid #eee; margin-bottom:1.5rem;">
+            <div style="background:#2c2c2c; padding:1.5rem; border-radius:8px; border:1px solid #3a3a3a; margin-bottom:1.5rem;">
                 <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:12px;">
                     <div class="form-group">
                         <label>Fornecedor</label>
@@ -1020,16 +796,16 @@
 
                 <div class="section-title" style="margin-top:0;">Itens da Nota</div>
 
-                <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr auto; gap:10px; margin-bottom:8px; font-size:11px; font-weight:600; color:#999; text-transform:uppercase;">
+                <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr auto; gap:10px; margin-bottom:8px; font-size:11px; font-weight:600; color:#777; text-transform:uppercase;">
                     <span>Insumo</span><span>Quantidade</span><span>Unidade</span><span>Valor Total (R$)</span><span></span>
                 </div>
 
                 <div id="notaItens">
                     <div class="nota-item" style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr auto; gap:10px; margin-bottom:8px; align-items:center;">
-                        <select class="nota-insumo" style="padding:10px; border:1px solid #ddd; border-radius:6px; font-size:13px;"></select>
-                        <input type="number" class="nota-qtd" placeholder="Ex: 10" min="0" step="0.001" style="padding:10px; border:1px solid #ddd; border-radius:6px; font-size:13px;">
-                        <span class="nota-unidade" style="padding:10px; background:#f0f0f0; border-radius:6px; font-size:13px; text-align:center; color:#666;">—</span>
-                        <input type="number" class="nota-valor" placeholder="R$ 0,00" min="0" step="0.01" style="padding:10px; border:1px solid #ddd; border-radius:6px; font-size:13px;">
+                        <select class="nota-insumo" style="padding:10px; border:1px solid #444; border-radius:6px; font-size:13px;"></select>
+                        <input type="number" class="nota-qtd" placeholder="Ex: 10" min="0" step="0.001" style="padding:10px; border:1px solid #444; border-radius:6px; font-size:13px;">
+                        <span class="nota-unidade" style="padding:10px; background:#333; border-radius:6px; font-size:13px; text-align:center; color:#aaa;">—</span>
+                        <input type="number" class="nota-valor" placeholder="R$ 0,00" min="0" step="0.01" style="padding:10px; border:1px solid #444; border-radius:6px; font-size:13px;">
                         <button class="danger" onclick="removerLinhaItem(this)" style="padding:8px 12px;">✕</button>
                     </div>
                 </div>
@@ -1076,7 +852,7 @@
 
             <!-- REGISTRO DO DIA -->
             <div class="section-title">Registrar Vendas do Dia</div>
-            <div style="background:#f9f9f9; padding:1.5rem; border-radius:8px; border:1px solid #eee; margin-bottom:1.5rem;">
+            <div style="background:#2c2c2c; padding:1.5rem; border-radius:8px; border:1px solid #3a3a3a; margin-bottom:1.5rem;">
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:1rem;">
                     <div class="form-group">
                         <label>Data</label>
@@ -1084,7 +860,7 @@
                     </div>
                     <div class="form-group">
                         <label>Forma de Pagamento Principal</label>
-                        <select id="vendaFormaPagamento" style="padding:10px; border:1px solid #ddd; border-radius:6px; font-size:14px;">
+                        <select id="vendaFormaPagamento" style="padding:10px; border:1px solid #444; border-radius:6px; font-size:14px;">
                             <option value="pix">PIX</option>
                             <option value="debito">Débito</option>
                             <option value="credito">Crédito à Vista</option>
@@ -1094,14 +870,14 @@
                     </div>
                 </div>
 
-                <div style="font-size:11px; font-weight:600; color:#999; text-transform:uppercase; display:grid; grid-template-columns:2fr 1fr 1fr; gap:10px; margin-bottom:8px;">
+                <div style="font-size:11px; font-weight:600; color:#777; text-transform:uppercase; display:grid; grid-template-columns:2fr 1fr 1fr; gap:10px; margin-bottom:8px;">
                     <span>Receita</span><span style="text-align:center;">Quantidade</span><span style="text-align:right;">Total</span>
                 </div>
 
                 <div id="vendasItens"></div>
 
-                <div style="margin-top:1rem; padding:1rem; background:#fff5f1; border:2px solid #ff6b35; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
-                    <span style="font-weight:600; color:#666;">Total do Dia:</span>
+                <div style="margin-top:1rem; padding:1rem; background:#2a1f1a; border:2px solid #ff6b35; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-weight:600; color:#aaa;">Total do Dia:</span>
                     <span style="font-size:24px; font-weight:700; color:#ff6b35;" id="vendaTotalDia">R$ 0,00</span>
                 </div>
 
@@ -1419,7 +1195,7 @@
             const totalDiv = document.createElement('div');
             totalDiv.style.cssText = 'background: #fff5f1; border: 2px solid #ff6b35; border-radius: 6px; padding: 12px; margin-top: 12px; text-align: right;';
             totalDiv.innerHTML = `
-                <div style="font-size: 12px; color: #999; text-transform: uppercase; margin-bottom: 8px;">Total dos Ingredientes</div>
+                <div style="font-size: 12px; color: #777; text-transform: uppercase; margin-bottom: 8px;">Total dos Ingredientes</div>
                 <div style="font-size: 24px; font-weight: 700; color: #ff6b35;">R$ ${totalCost.toFixed(2).replace('.', ',')}</div>
             `;
             summary.appendChild(totalDiv);
@@ -1570,8 +1346,8 @@
 
             list.innerHTML = Object.entries(categorias).map(([cat, receitasCat]) => `
                 <div style="margin-bottom: 1.5rem;">
-                    <div style="font-size: 15px; font-weight: 700; color: #666; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px solid #f0f0f0;">
-                        ${categoriaIcons[cat] || '🍽️'} ${cat} <span style="font-size:12px; color:#999;">(${receitasCat.length})</span>
+                    <div style="font-size: 15px; font-weight: 700; color: #aaa; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px solid #f0f0f0;">
+                        ${categoriaIcons[cat] || '🍽️'} ${cat} <span style="font-size:12px; color:#777;">(${receitasCat.length})</span>
                     </div>
                     ${receitasCat.map(recipe => {
                         const margin = recipe.price - recipe.cost;
@@ -1582,7 +1358,7 @@
                                 <div class="recipe-header">
                                     <span class="recipe-name" onclick="showRecipeDetails(${recipe.id})" style="cursor: pointer; color: #ff6b35; transition: all 0.2s;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">${recipe.name}</span>
                                     <div style="display:flex; gap:8px; align-items:center;">
-                                        <select onchange="categorizarReceita(${recipe.id}, this.value)" style="padding:5px 8px; border:1px solid #ddd; border-radius:6px; font-size:12px; color:#666; cursor:pointer;">
+                                        <select onchange="categorizarReceita(${recipe.id}, this.value)" style="padding:5px 8px; border:1px solid #444; border-radius:6px; font-size:12px; color:#aaa; cursor:pointer;">
                                             <option value="" ${!recipe.categoria ? 'selected' : ''}>📂 Categoria</option>
                                             <option value="Pizza" ${recipe.categoria==='Pizza' ? 'selected' : ''}>🍕 Pizza</option>
                                             <option value="Burger" ${recipe.categoria==='Burger' ? 'selected' : ''}>🍔 Burger</option>
@@ -1718,16 +1494,16 @@
                         ${isEditMode ? `
                             <div style="display:grid; grid-template-columns:2fr 1fr 1fr; gap:12px; margin-bottom:1rem;">
                                 <div>
-                                    <div style="font-size:11px; color:#999; text-transform:uppercase; margin-bottom:4px;">Nome da Receita</div>
-                                    <input type="text" id="editNome" value="${recipe.name}" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px; font-size:14px; font-weight:600;">
+                                    <div style="font-size:11px; color:#777; text-transform:uppercase; margin-bottom:4px;">Nome da Receita</div>
+                                    <input type="text" id="editNome" value="${recipe.name}" style="width:100%; padding:10px; border:1px solid #444; border-radius:6px; font-size:14px; font-weight:600;">
                                 </div>
                                 <div>
-                                    <div style="font-size:11px; color:#999; text-transform:uppercase; margin-bottom:4px;">Preço de Venda (R$)</div>
-                                    <input type="number" id="editPreco" value="${recipe.price}" step="0.01" min="0" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px; font-size:14px; font-weight:600;">
+                                    <div style="font-size:11px; color:#777; text-transform:uppercase; margin-bottom:4px;">Preço de Venda (R$)</div>
+                                    <input type="number" id="editPreco" value="${recipe.price}" step="0.01" min="0" style="width:100%; padding:10px; border:1px solid #444; border-radius:6px; font-size:14px; font-weight:600;">
                                 </div>
                                 <div>
-                                    <div style="font-size:11px; color:#999; text-transform:uppercase; margin-bottom:4px;">Categoria</div>
-                                    <select id="editCategoria" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px; font-size:14px;">
+                                    <div style="font-size:11px; color:#777; text-transform:uppercase; margin-bottom:4px;">Categoria</div>
+                                    <select id="editCategoria" style="width:100%; padding:10px; border:1px solid #444; border-radius:6px; font-size:14px;">
                                         <option value="Pizza" ${recipe.categoria==='Pizza'?'selected':''}>🍕 Pizza</option>
                                         <option value="Burger" ${recipe.categoria==='Burger'?'selected':''}>🍔 Burger</option>
                                         <option value="Porção" ${recipe.categoria==='Porção'?'selected':''}>🍟 Porção</option>
@@ -1739,27 +1515,27 @@
                             </div>
                         ` : `
                             <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
-                                <h3 style="font-size: 18px; font-weight: 700; color: #333;">${recipe.name}</h3>
-                                <span style="background:#fff5f1; color:#ff6b35; padding:4px 10px; border-radius:12px; font-size:12px; font-weight:600;">
+                                <h3 style="font-size: 18px; font-weight: 700; color: #e8e8e8;">${recipe.name}</h3>
+                                <span style="background:#2a1f1a; color:#ff6b35; padding:4px 10px; border-radius:12px; font-size:12px; font-weight:600;">
                                     ${categoriaIcons[recipe.categoria] || '🍽️'} ${recipe.categoria || 'Sem Categoria'}
                                 </span>
                             </div>
                         `}
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1.5rem;">
                             <div style="background: #f0f0f0; padding: 12px; border-radius: 6px;">
-                                <div style="font-size: 11px; color: #999; text-transform: uppercase; margin-bottom: 4px;">Custo Total</div>
-                                <div style="font-size: 18px; font-weight: 600; color: #333;" id="recipeCostDisplay">R$ ${calculateTotalCost().toFixed(2).replace('.', ',')}</div>
+                                <div style="font-size: 11px; color: #777; text-transform: uppercase; margin-bottom: 4px;">Custo Total</div>
+                                <div style="font-size: 18px; font-weight: 600; color: #e8e8e8;" id="recipeCostDisplay">R$ ${calculateTotalCost().toFixed(2).replace('.', ',')}</div>
                             </div>
                             <div style="background: #f0f0f0; padding: 12px; border-radius: 6px;">
-                                <div style="font-size: 11px; color: #999; text-transform: uppercase; margin-bottom: 4px;">Preço de Venda</div>
-                                <div style="font-size: 18px; font-weight: 600; color: #333;">R$ ${recipe.price.toFixed(2).replace('.', ',')}</div>
+                                <div style="font-size: 11px; color: #777; text-transform: uppercase; margin-bottom: 4px;">Preço de Venda</div>
+                                <div style="font-size: 18px; font-weight: 600; color: #e8e8e8;">R$ ${recipe.price.toFixed(2).replace('.', ',')}</div>
                             </div>
                         </div>
                     </div>
 
                     <div style="border-top: 2px solid #f0f0f0; padding-top: 1.5rem;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                            <h4 style="font-size: 14px; font-weight: 600; color: #333;">Ingredientes</h4>
+                            <h4 style="font-size: 14px; font-weight: 600; color: #e8e8e8;">Ingredientes</h4>
                             ${isEditMode ? `<button class="success" onclick="addNewIngredientBtn()">+ Adicionar Insumo</button>` : ''}
                         </div>
                         
@@ -1782,19 +1558,19 @@
                                 return `
                                     <div style="display: grid; grid-template-columns: 2fr 1fr 1fr ${isEditMode ? '60px' : ''}; gap: 12px; padding: 12px; background: #fafafa; border-radius: 6px; margin-bottom: 8px; border-left: 3px solid #ff6b35; align-items: ${isEditMode ? 'start' : 'center'};">
                                         <div>
-                                            <div style="font-weight: 500; color: #333; font-size: 13px;">${ing.name}</div>
+                                            <div style="font-weight: 500; color: #e8e8e8; font-size: 13px;">${ing.name}</div>
                                             ${isEditMode ? `
                                                 <input type="number" id="input-${idx}" value="${ing.quantity}" step="0.01" min="0" 
                                                        onchange="updateEditingIngredient(${idx}, this.value)" 
-                                                       style="padding: 6px; border: 1px solid #ddd; border-radius: 4px; width: 100%; font-size: 12px; margin-top: 4px;">
-                                            ` : `<div style="font-size: 12px; color: #999;">${costDetail}</div>`}
+                                                       style="padding: 6px; border: 1px solid #444; border-radius: 4px; width: 100%; font-size: 12px; margin-top: 4px;">
+                                            ` : `<div style="font-size: 12px; color: #777;">${costDetail}</div>`}
                                         </div>
                                         <div style="text-align: center; border-right: 1px solid #ddd; padding-right: 12px;">
-                                            <div style="font-size: 11px; color: #999; text-transform: uppercase;">Unitário</div>
+                                            <div style="font-size: 11px; color: #777; text-transform: uppercase;">Unitário</div>
                                             <div style="font-weight: 600; color: #ff6b35;">R$ ${data.price.toFixed(4).replace('.', ',')}</div>
                                         </div>
                                         <div style="text-align: right;">
-                                            <div style="font-size: 11px; color: #999; text-transform: uppercase;">Total</div>
+                                            <div style="font-size: 11px; color: #777; text-transform: uppercase;">Total</div>
                                             <div style="font-weight: 600; color: #27ae60;">R$ ${ingredientCost.toFixed(2).replace('.', ',')}</div>
                                         </div>
                                         ${isEditMode ? `<button class="danger" onclick="deleteEditingIngredient(${idx})">🗑</button>` : ''}
@@ -1958,7 +1734,7 @@
                     <div class="cost-card">
                         <div style="display: grid; grid-template-columns: 2fr 1fr auto; gap: 12px; align-items: center;">
                             <div>
-                                <div style="font-weight: 500; color: #333; font-size: 14px;">${cost.name}</div>
+                                <div style="font-weight: 500; color: #e8e8e8; font-size: 14px;">${cost.name}</div>
                             </div>
                             <div style="text-align: right;">
                                 <div style="font-weight: 600; color: #ff6b35; font-size: 16px;">R$ ${cost.value.toFixed(2).replace('.', ',')}</div>
@@ -2014,7 +1790,7 @@
                     <div class="cost-card">
                         <div style="display: grid; grid-template-columns: 2fr 1fr auto; gap: 12px; align-items: center;">
                             <div>
-                                <div style="font-weight: 500; color: #333; font-size: 14px;">${cost.name}</div>
+                                <div style="font-weight: 500; color: #e8e8e8; font-size: 14px;">${cost.name}</div>
                             </div>
                             <div style="text-align: right;">
                                 <div style="font-weight: 600; color: #3498db; font-size: 16px;">R$ ${cost.value.toFixed(2).replace('.', ',')}</div>
@@ -2077,7 +1853,7 @@
 
             const tbody = document.getElementById('analysisTable');
             if (recipes.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem; color: #999;">Nenhuma receita salva. Crie receitas na aba "Receitas".</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 2rem; color: #777;">Nenhuma receita salva. Crie receitas na aba "Receitas".</td></tr>';
             } else {
                 tbody.innerHTML = recipes.map(recipe => {
                     const margin = recipe.price - recipe.cost;
@@ -2225,10 +2001,10 @@ Responda APENAS em JSON válido neste formato exato:
                         ✅ A IA identificou <strong>${json.itens.length} itens</strong> na nota. Verifique se os insumos estão corretos e ajuste se necessário antes de confirmar.
                     </div>
 
-                    <div style="background:#f9f9f9; padding:1rem; border-radius:8px; margin-bottom:1.5rem; display:flex; gap:2rem; flex-wrap:wrap;">
-                        <div><span style="color:#999; font-size:12px;">FORNECEDOR</span><br><strong>${json.fornecedor || '—'}</strong></div>
-                        <div><span style="color:#999; font-size:12px;">DATA</span><br><strong>${json.data ? new Date(json.data+'T12:00:00').toLocaleDateString('pt-BR') : '—'}</strong></div>
-                        ${json.numero ? `<div><span style="color:#999; font-size:12px;">Nº NOTA</span><br><strong>${json.numero}</strong></div>` : ''}
+                    <div style="background:#2c2c2c; padding:1rem; border-radius:8px; margin-bottom:1.5rem; display:flex; gap:2rem; flex-wrap:wrap;">
+                        <div><span style="color:#777; font-size:12px;">FORNECEDOR</span><br><strong>${json.fornecedor || '—'}</strong></div>
+                        <div><span style="color:#777; font-size:12px;">DATA</span><br><strong>${json.data ? new Date(json.data+'T12:00:00').toLocaleDateString('pt-BR') : '—'}</strong></div>
+                        ${json.numero ? `<div><span style="color:#777; font-size:12px;">Nº NOTA</span><br><strong>${json.numero}</strong></div>` : ''}
                     </div>
 
                     <div class="section-title" style="margin-top:0;">Itens identificados pela IA</div>
@@ -2243,12 +2019,12 @@ Responda APENAS em JSON válido neste formato exato:
                                 <div style="background:${insumoExiste ? '#f9f9f9' : '#fff8e1'}; border:1px solid ${insumoExiste ? '#eee' : '#f39c12'}; border-radius:8px; padding:1rem; margin-bottom:8px;">
                                     <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:12px; align-items:center;">
                                         <div>
-                                            <div style="font-size:11px; color:#999; margin-bottom:4px;">ITEM DA NOTA</div>
-                                            <div style="font-weight:600; color:#333;">${item.nomeNota}</div>
+                                            <div style="font-size:11px; color:#777; margin-bottom:4px;">ITEM DA NOTA</div>
+                                            <div style="font-weight:600; color:#e8e8e8;">${item.nomeNota}</div>
                                         </div>
                                         <div>
-                                            <div style="font-size:11px; color:#999; margin-bottom:4px;">INSUMO NO SISTEMA</div>
-                                            <select id="ia_insumo_${idx}" style="width:100%; padding:8px; border:1px solid #ddd; border-radius:6px; font-size:13px; background:${insumoExiste ? 'white' : '#fff8e1'};">
+                                            <div style="font-size:11px; color:#777; margin-bottom:4px;">INSUMO NO SISTEMA</div>
+                                            <select id="ia_insumo_${idx}" style="width:100%; padding:8px; border:1px solid #444; border-radius:6px; font-size:13px; background:${insumoExiste ? 'white' : '#fff8e1'};">
                                                 <option value="">— Selecionar —</option>
                                                 ${opcoesInsumos}
                                             </select>
@@ -2256,20 +2032,20 @@ Responda APENAS em JSON válido neste formato exato:
                                         </div>
                                         <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
                                             <div>
-                                                <div style="font-size:11px; color:#999; margin-bottom:4px;">QUANTIDADE</div>
+                                                <div style="font-size:11px; color:#777; margin-bottom:4px;">QUANTIDADE</div>
                                                 <input type="number" id="ia_qtd_${idx}" value="${item.quantidade}" step="0.001" min="0"
-                                                       style="width:100%; padding:8px; border:1px solid #ddd; border-radius:6px; font-size:13px;">
+                                                       style="width:100%; padding:8px; border:1px solid #444; border-radius:6px; font-size:13px;">
                                             </div>
                                             <div>
-                                                <div style="font-size:11px; color:#999; margin-bottom:4px;">UNIDADE</div>
+                                                <div style="font-size:11px; color:#777; margin-bottom:4px;">UNIDADE</div>
                                                 <input type="text" id="ia_unit_${idx}" value="${item.unidade}"
-                                                       style="width:100%; padding:8px; border:1px solid #ddd; border-radius:6px; font-size:13px;">
+                                                       style="width:100%; padding:8px; border:1px solid #444; border-radius:6px; font-size:13px;">
                                             </div>
                                         </div>
                                         <div>
-                                            <div style="font-size:11px; color:#999; margin-bottom:4px;">VALOR TOTAL</div>
+                                            <div style="font-size:11px; color:#777; margin-bottom:4px;">VALOR TOTAL</div>
                                             <input type="number" id="ia_valor_${idx}" value="${item.valorTotal}" step="0.01" min="0"
-                                                   style="width:100%; padding:8px; border:1px solid #ddd; border-radius:6px; font-size:13px; font-weight:600; color:#ff6b35;">
+                                                   style="width:100%; padding:8px; border:1px solid #444; border-radius:6px; font-size:13px; font-weight:600; color:#ff6b35;">
                                         </div>
                                     </div>
                                 </div>
@@ -2324,13 +2100,13 @@ Responda APENAS em JSON válido neste formato exato:
                     .map(ing => `<option value="${ing}" ${ing === item.insumo ? 'selected' : ''}>${ing}</option>`).join('');
 
                 div.innerHTML = `
-                    <select class="nota-insumo" style="padding:10px; border:1px solid #ddd; border-radius:6px; font-size:13px;">
+                    <select class="nota-insumo" style="padding:10px; border:1px solid #444; border-radius:6px; font-size:13px;">
                         <option value="">— Selecionar —</option>
                         ${opcoesInsumos}
                     </select>
-                    <input type="number" class="nota-qtd" value="${item.qtd}" min="0" step="0.001" style="padding:10px; border:1px solid #ddd; border-radius:6px; font-size:13px;">
-                    <span class="nota-unidade" style="padding:10px; background:#f0f0f0; border-radius:6px; font-size:13px; text-align:center; color:#666;">${item.unit}</span>
-                    <input type="number" class="nota-valor" value="${item.valor}" min="0" step="0.01" style="padding:10px; border:1px solid #ddd; border-radius:6px; font-size:13px;">
+                    <input type="number" class="nota-qtd" value="${item.qtd}" min="0" step="0.001" style="padding:10px; border:1px solid #444; border-radius:6px; font-size:13px;">
+                    <span class="nota-unidade" style="padding:10px; background:#333; border-radius:6px; font-size:13px; text-align:center; color:#aaa;">${item.unit}</span>
+                    <input type="number" class="nota-valor" value="${item.valor}" min="0" step="0.01" style="padding:10px; border:1px solid #444; border-radius:6px; font-size:13px;">
                     <button class="danger" onclick="removerLinhaItem(this)" style="padding:8px 12px;">✕</button>
                 `;
                 container.appendChild(div);
@@ -2381,10 +2157,10 @@ Responda APENAS em JSON válido neste formato exato:
             div.className = 'nota-item';
             div.style.cssText = 'display:grid; grid-template-columns:2fr 1fr 1fr 1fr auto; gap:10px; margin-bottom:8px; align-items:center;';
             div.innerHTML = `
-                <select class="nota-insumo" style="padding:10px; border:1px solid #ddd; border-radius:6px; font-size:13px;"></select>
-                <input type="number" class="nota-qtd" placeholder="Ex: 10" min="0" step="0.001" style="padding:10px; border:1px solid #ddd; border-radius:6px; font-size:13px;">
-                <span class="nota-unidade" style="padding:10px; background:#f0f0f0; border-radius:6px; font-size:13px; text-align:center; color:#666;">—</span>
-                <input type="number" class="nota-valor" placeholder="R$ 0,00" min="0" step="0.01" style="padding:10px; border:1px solid #ddd; border-radius:6px; font-size:13px;">
+                <select class="nota-insumo" style="padding:10px; border:1px solid #444; border-radius:6px; font-size:13px;"></select>
+                <input type="number" class="nota-qtd" placeholder="Ex: 10" min="0" step="0.001" style="padding:10px; border:1px solid #444; border-radius:6px; font-size:13px;">
+                <span class="nota-unidade" style="padding:10px; background:#333; border-radius:6px; font-size:13px; text-align:center; color:#aaa;">—</span>
+                <input type="number" class="nota-valor" placeholder="R$ 0,00" min="0" step="0.01" style="padding:10px; border:1px solid #444; border-radius:6px; font-size:13px;">
                 <button class="danger" onclick="removerLinhaItem(this)" style="padding:8px 12px;">✕</button>
             `;
             container.appendChild(div);
@@ -2450,15 +2226,15 @@ Responda APENAS em JSON válido neste formato exato:
                         <button class="modal-close" onclick="this.closest('.modal').remove()">✕</button>
                     </div>
 
-                    <div style="background:#f9f9f9; padding:1rem; border-radius:8px; margin-bottom:1.5rem; display:flex; gap:2rem;">
-                        <div><span style="color:#999; font-size:12px;">FORNECEDOR</span><br><strong>${fornecedor}</strong></div>
-                        <div><span style="color:#999; font-size:12px;">DATA</span><br><strong>${new Date(data+'T12:00:00').toLocaleDateString('pt-BR')}</strong></div>
-                        ${numero ? `<div><span style="color:#999; font-size:12px;">Nº NOTA</span><br><strong>${numero}</strong></div>` : ''}
-                        <div><span style="color:#999; font-size:12px;">TOTAL DA NOTA</span><br><strong style="color:#ff6b35; font-size:18px;">R$ ${totalNota.toFixed(2).replace('.', ',')}</strong></div>
+                    <div style="background:#2c2c2c; padding:1rem; border-radius:8px; margin-bottom:1.5rem; display:flex; gap:2rem;">
+                        <div><span style="color:#777; font-size:12px;">FORNECEDOR</span><br><strong>${fornecedor}</strong></div>
+                        <div><span style="color:#777; font-size:12px;">DATA</span><br><strong>${new Date(data+'T12:00:00').toLocaleDateString('pt-BR')}</strong></div>
+                        ${numero ? `<div><span style="color:#777; font-size:12px;">Nº NOTA</span><br><strong>${numero}</strong></div>` : ''}
+                        <div><span style="color:#777; font-size:12px;">TOTAL DA NOTA</span><br><strong style="color:#ff6b35; font-size:18px;">R$ ${totalNota.toFixed(2).replace('.', ',')}</strong></div>
                     </div>
 
                     <div class="section-title" style="margin-top:0;">📦 Itens e Impacto nos Preços</div>
-                    <p style="color:#999; font-size:13px; margin-bottom:1rem;">Verifique como cada item vai atualizar o preço dos insumos. Você pode editar antes de confirmar.</p>
+                    <p style="color:#777; font-size:13px; margin-bottom:1rem;">Verifique como cada item vai atualizar o preço dos insumos. Você pode editar antes de confirmar.</p>
 
                     <table style="width:100%; margin-bottom:1.5rem;">
                         <thead>
@@ -2477,14 +2253,14 @@ Responda APENAS em JSON válido neste formato exato:
                                 const seta = parseFloat(item.variacao) > 0 ? '↑' : parseFloat(item.variacao) < 0 ? '↓' : '→';
                                 return `
                                     <tr>
-                                        <td><strong>${item.insumo}</strong><br><span style="font-size:11px; color:#999;">${item.qtd} ${item.unit} comprados</span></td>
+                                        <td><strong>${item.insumo}</strong><br><span style="font-size:11px; color:#777;">${item.qtd} ${item.unit} comprados</span></td>
                                         <td class="text-right">R$ ${item.valor.toFixed(2).replace('.', ',')}</td>
-                                        <td class="text-right" style="color:#999;">R$ ${item.precoAntigo.toFixed(4).replace('.', ',')} / ${item.unit}</td>
+                                        <td class="text-right" style="color:#777;">R$ ${item.precoAntigo.toFixed(4).replace('.', ',')} / ${item.unit}</td>
                                         <td class="text-right">
                                             <input type="number" id="revisao_preco_${idx}" value="${item.precoNovo.toFixed(4)}" step="0.0001" min="0"
-                                                   style="width:100px; padding:6px; border:1px solid #ddd; border-radius:4px; font-size:13px; text-align:right;"
+                                                   style="width:100px; padding:6px; border:1px solid #444; border-radius:4px; font-size:13px; text-align:right;"
                                                    onchange="atualizarVariacaoRevisao(${idx}, ${item.precoAntigo})">
-                                            <span style="font-size:11px; color:#999;"> / ${item.unit}</span>
+                                            <span style="font-size:11px; color:#777;"> / ${item.unit}</span>
                                         </td>
                                         <td class="text-right" id="variacao_${idx}">
                                             <strong style="color:${cor};">${seta} ${Math.abs(item.variacao)}%</strong>
@@ -2564,7 +2340,7 @@ Responda APENAS em JSON válido neste formato exato:
                     <div class="recipe-header">
                         <div>
                             <span style="font-weight:700; font-size:15px;">${nota.fornecedor}</span>
-                            <span style="color:#999; font-size:12px; margin-left:12px;">${new Date(nota.data+'T12:00:00').toLocaleDateString('pt-BR')} ${nota.numero ? '· Nº '+nota.numero : ''}</span>
+                            <span style="color:#777; font-size:12px; margin-left:12px;">${new Date(nota.data+'T12:00:00').toLocaleDateString('pt-BR')} ${nota.numero ? '· Nº '+nota.numero : ''}</span>
                         </div>
                         <span style="font-weight:700; font-size:18px; color:#ff6b35;">R$ ${nota.total.toFixed(2).replace('.', ',')}</span>
                     </div>
@@ -2572,7 +2348,7 @@ Responda APENAS em JSON válido neste formato exato:
                         ${nota.itens.map(item => `
                             <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #f0f0f0; font-size:13px;">
                                 <span><strong>${item.insumo}</strong> — ${item.qtd} ${item.unit}</span>
-                                <span style="color:#999;">
+                                <span style="color:#777;">
                                     R$ ${item.precoAntigo.toFixed(4).replace('.', ',')} → 
                                     <strong style="color:${item.precoNovo > item.precoAntigo ? '#e74c3c' : '#27ae60'};">
                                         R$ ${item.precoNovo.toFixed(4).replace('.', ',')}
@@ -2597,12 +2373,12 @@ Responda APENAS em JSON válido neste formato exato:
             container.innerHTML = recipes.map(recipe => `
                 <div style="display:grid; grid-template-columns:2fr 1fr 1fr; gap:10px; margin-bottom:8px; align-items:center;">
                     <div>
-                        <div style="font-weight:500; color:#333; font-size:14px;">${recipe.name}</div>
-                        <div style="font-size:11px; color:#999;">R$ ${recipe.price.toFixed(2).replace('.', ',')} un</div>
+                        <div style="font-weight:500; color:#e8e8e8; font-size:14px;">${recipe.name}</div>
+                        <div style="font-size:11px; color:#777;">R$ ${recipe.price.toFixed(2).replace('.', ',')} un</div>
                     </div>
                     <input type="number" id="venda_${recipe.id}" placeholder="0" min="0" value="0"
                            onchange="atualizarTotalDia()"
-                           style="padding:10px; border:1px solid #ddd; border-radius:6px; font-size:16px; font-weight:700; text-align:center;">
+                           style="padding:10px; border:1px solid #444; border-radius:6px; font-size:16px; font-weight:700; text-align:center;">
                     <div style="text-align:right; font-weight:600; color:#ff6b35;" id="subtotal_${recipe.id}">R$ 0,00</div>
                 </div>
             `).join('');
@@ -2712,18 +2488,18 @@ Responda APENAS em JSON válido neste formato exato:
                     <div class="recipe-header">
                         <div>
                             <span style="font-weight:700; font-size:15px;">${new Date(venda.data+'T12:00:00').toLocaleDateString('pt-BR', {weekday:'long', day:'2-digit', month:'long'})}</span>
-                            <span style="margin-left:10px; background:#e8f4f8; color:#2c5aa0; padding:3px 8px; border-radius:12px; font-size:11px; font-weight:600;">${formas[venda.formaPagamento] || venda.formaPagamento}</span>
+                            <span style="margin-left:10px; background:#1a2535; color:#2c5aa0; padding:3px 8px; border-radius:12px; font-size:11px; font-weight:600;">${formas[venda.formaPagamento] || venda.formaPagamento}</span>
                         </div>
                         <div style="text-align:right;">
                             <div style="font-weight:700; font-size:18px; color:#ff6b35;">R$ ${venda.total.toFixed(2).replace('.', ',')}</div>
-                            <div style="font-size:11px; color:#999;">${venda.unidades} unidades</div>
+                            <div style="font-size:11px; color:#777;">${venda.unidades} unidades</div>
                         </div>
                     </div>
                     <div style="margin-top:8px; display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:8px;">
                         ${venda.itens.map(item => `
-                            <div style="background:#f9f9f9; padding:8px 12px; border-radius:6px; border-left:3px solid #ff6b35;">
+                            <div style="background:#2c2c2c; padding:8px 12px; border-radius:6px; border-left:3px solid #ff6b35;">
                                 <div style="font-weight:600; font-size:13px;">${item.name}</div>
-                                <div style="font-size:12px; color:#999;">${item.qtd} un · R$ ${item.subtotal.toFixed(2).replace('.', ',')}</div>
+                                <div style="font-size:12px; color:#777;">${item.qtd} un · R$ ${item.subtotal.toFixed(2).replace('.', ',')}</div>
                             </div>
                         `).join('')}
                     </div>
@@ -2755,13 +2531,13 @@ Responda APENAS em JSON válido neste formato exato:
             lista.innerHTML = recipes.map(recipe => `
                 <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 12px; align-items: center; padding: 12px; background: #fafafa; border-radius: 6px; margin-bottom: 8px; border-left: 3px solid #ff6b35;">
                     <div>
-                        <div style="font-weight: 600; color: #333;">${recipe.name}</div>
-                        <div style="font-size: 12px; color: #999;">Custo: R$ ${recipe.cost.toFixed(2).replace('.', ',')} | Preço atual: R$ ${recipe.price.toFixed(2).replace('.', ',')}</div>
+                        <div style="font-weight: 600; color: #e8e8e8;">${recipe.name}</div>
+                        <div style="font-size: 12px; color: #777;">Custo: R$ ${recipe.cost.toFixed(2).replace('.', ',')} | Preço atual: R$ ${recipe.price.toFixed(2).replace('.', ',')}</div>
                     </div>
                     <div style="display: flex; align-items: center; gap: 8px;">
                         <input type="number" id="vendas_${recipe.id}" placeholder="0" min="0" value="0"
-                               style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; text-align: center;">
-                        <span style="color: #999; font-size: 12px; white-space: nowrap;">un/mês</span>
+                               style="width: 100%; padding: 10px; border: 1px solid #444; border-radius: 6px; font-size: 14px; text-align: center;">
+                        <span style="color: #777; font-size: 12px; white-space: nowrap;">un/mês</span>
                     </div>
                 </div>
             `).join('');
